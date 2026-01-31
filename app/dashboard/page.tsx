@@ -3,332 +3,440 @@
 import { useState } from "react";
 import Link from "next/link";
 import InvestmentInsightsModal from "@/components/InvestmentInsightsModal";
+import { StatCard, Card, Input, Button } from "@/components/ui";
+import {
+  CategoryCard,
+  TransactionItem,
+  CreditScoreGauge,
+  VirtualCard,
+  InsightCard,
+  CreateDebtModal,
+} from "@/components/dashboard";
 
 export default function DashboardPage() {
   const [showInvestmentModal, setShowInvestmentModal] = useState(false);
+  const [showDebtModal, setShowDebtModal] = useState(false);
+
+  // Category icons
+  const categoryIcons = {
+    fixedObligations: (
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        />
+      </svg>
+    ),
+    dailyEssentials: (
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+        />
+      </svg>
+    ),
+    lifestyle: (
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    ),
+    subscriptions: (
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        />
+      </svg>
+    ),
+    financialLeakage: (
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+        />
+      </svg>
+    ),
+    savings: (
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+        />
+      </svg>
+    ),
+  };
+
+  const transactions = [
+    {
+      merchant: "Uber Eats",
+      amount: -5000,
+      category: "Food",
+      date: "Jan 28",
+      icon: "🍔",
+    },
+    {
+      merchant: "Jumia Food",
+      amount: -3500,
+      category: "Food",
+      date: "Jan 27",
+      icon: "🍕",
+    },
+    {
+      merchant: "Uber",
+      amount: -2000,
+      category: "Transport",
+      date: "Jan 26",
+      icon: "🚗",
+    },
+    {
+      merchant: "DSTV",
+      amount: -15000,
+      category: "Bills",
+      date: "Jan 23",
+      icon: "📺",
+    },
+    {
+      merchant: "Netflix",
+      amount: -3000,
+      category: "Subscriptions",
+      date: "Jan 22",
+      icon: "🎬",
+    },
+  ];
 
   return (
     <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-primary to-green-secondary flex items-center justify-center text-white font-semibold text-lg">
+            AO
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-text-primary">
+              Adebayo Odunsi
+            </h1>
+            <p className="text-sm text-text-secondary font-bold uppercase">
+              Welcome back to Flynt 👋
+            </p>
+          </div>
+        </div>
+
+        <Button
+          onClick={() => setShowDebtModal(true)}
+          className="flex items-center gap-2 py-3 px-6 font-bold uppercase tracking-wide"
+        >
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          Create Debt Note
+        </Button>
+      </div>
+
       {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-4">
-        {/* Total Balance */}
-        <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-text-secondary">Total Balance</span>
-            <svg className="h-5 w-5 text-green-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div className="text-2xl font-bold text-text-primary">₦85,000</div>
-          <p className="text-xs text-text-muted mt-1">GTBank • 0123456789</p>
-        </div>
-
-        {/* Income */}
-        <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-text-secondary">Income</span>
-            <svg className="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-          </div>
-          <div className="text-2xl font-bold text-text-primary">₦300,000</div>
-          <p className="text-xs text-success mt-1">This month</p>
-        </div>
-
-        {/* Expenses */}
-        <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-text-secondary">Expenses</span>
-            <svg className="h-5 w-5 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-            </svg>
-          </div>
-          <div className="text-2xl font-bold text-text-primary">₦206,500</div>
-          <p className="text-xs text-text-muted mt-1">69% of budget</p>
-        </div>
-
-        {/* Savings */}
-        <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-text-secondary">Savings</span>
-            <svg className="h-5 w-5 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-            </svg>
-          </div>
-          <div className="text-2xl font-bold text-text-primary">₦60,000</div>
-          <p className="text-xs text-success mt-1">+15% vs last month</p>
-        </div>
+      <div className="grid gap-4 md:grid-cols-3">
+        <StatCard
+          title="Total Inflow"
+          value={450000}
+          trend={{ value: "+5.1% vs last month", isPositive: true }}
+        />
+        <StatCard
+          title="Total Outflow"
+          value={305000}
+          trend={{ value: "+2% vs last month", isPositive: true }}
+        />
+        <StatCard
+          title="Monthly Surplus"
+          value={145000}
+          subtitle="Safe to invest or save"
+          variant="success"
+        />
       </div>
 
       {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Left Column - Financial Insights */}
+        {/* Left Column - Spending Breakdown */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Budget Overview Card */}
-          <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-text-primary">Budget Overview</h2>
-              <Link href="/dashboard/budget" className="text-sm font-medium text-green-primary hover:text-green-light">
-                View Details →
-              </Link>
-            </div>
+          {/* Spending Breakdown */}
+          <div>
+            <h2 className="text-lg font-semibold text-text-primary mb-4">
+              Spending Breakdown
+            </h2>
 
-            <div className="grid gap-4 md:grid-cols-3 mb-6">
-              <div>
-                <div className="text-xs text-text-muted mb-1">Essentials</div>
-                <div className="text-xl font-bold text-text-primary">₦51,500</div>
-                <div className="text-xs text-text-secondary">of ₦150,000</div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg-elevated">
-                  <div className="h-full w-[34%] rounded-full bg-green-primary"></div>
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-text-muted mb-1">Discretionary</div>
-                <div className="text-xl font-bold text-text-primary">₦33,000</div>
-                <div className="text-xs text-text-secondary">of ₦90,000</div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg-elevated">
-                  <div className="h-full w-[37%] rounded-full bg-orange"></div>
-                </div>
-              </div>
-              <div>
-                <div className="text-xs text-text-muted mb-1">Savings</div>
-                <div className="text-xl font-bold text-text-primary">₦60,000</div>
-                <div className="text-xs text-text-secondary">of ₦60,000</div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg-elevated">
-                  <div className="h-full w-full rounded-full bg-success"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-green-primary/10 border border-green-primary/20">
-              <svg className="h-5 w-5 text-green-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p className="text-sm text-text-primary">You're on track! Keep up the great work.</p>
-            </div>
-          </div>
-
-          {/* AI Insights */}
-          <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-text-primary">Financial Insights</h2>
-              <Link href="/dashboard/insights" className="text-sm font-medium text-green-primary hover:text-green-light">
-                See All →
-              </Link>
-            </div>
-
-            <div className="space-y-3">
-              {/* Warning Insight */}
-              <div className="flex gap-3 rounded-lg border border-warning/20 bg-warning/5 p-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-warning/10">
-                  <svg className="h-5 w-5 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-text-primary text-sm">Budget Alert</h3>
-                  <p className="mt-1 text-sm text-text-secondary">At current rate, you'll exceed food budget in 4 days</p>
-                </div>
-              </div>
-
-              {/* Info Insight */}
-              <div className="flex gap-3 rounded-lg border border-info/20 bg-info/5 p-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-info/10">
-                  <svg className="h-5 w-5 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-text-primary text-sm">Subscriptions Detected</h3>
-                  <p className="mt-1 text-sm text-text-secondary">3 subscriptions found totaling ₦2,050/month</p>
-                </div>
-              </div>
-
-              {/* Success Insight */}
-              <div className="flex gap-3 rounded-lg border border-success/20 bg-success/5 p-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-success/10">
-                  <svg className="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-text-primary text-sm">Great Progress!</h3>
-                  <p className="mt-1 text-sm text-text-secondary">You're 15% under budget this month</p>
-                </div>
-              </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              <CategoryCard
+                title="Fixed Obligations"
+                amount={98000}
+                percentage={32}
+                trend={{ value: "8.2%", isPositive: true }}
+                icon={categoryIcons.fixedObligations}
+                color="blue"
+              />
+              <CategoryCard
+                title="Daily Essentials"
+                amount={75000}
+                percentage={32}
+                trend={{ value: "8.2%", isPositive: true }}
+                icon={categoryIcons.dailyEssentials}
+                color="amber"
+              />
+              <CategoryCard
+                title="Lifestyle"
+                amount={75000}
+                percentage={32}
+                trend={{ value: "8.2%", isPositive: true }}
+                icon={categoryIcons.lifestyle}
+                color="purple"
+              />
+              <CategoryCard
+                title="Subscriptions"
+                amount={98000}
+                percentage={32}
+                trend={{ value: "8.2%", isPositive: true }}
+                icon={categoryIcons.subscriptions}
+                color="cyan"
+              />
+              <CategoryCard
+                title="Financial Leakage"
+                amount={75000}
+                percentage={32}
+                trend={{ value: "8.2%", isPositive: true }}
+                icon={categoryIcons.financialLeakage}
+                color="orange"
+              />
+              <CategoryCard
+                title="Savings & Invest"
+                amount={17000}
+                percentage={32}
+                trend={{ value: "0%", isPositive: false }}
+                icon={categoryIcons.savings}
+                color="sky"
+              />
             </div>
           </div>
 
           {/* Recent Transactions */}
-          <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-6">
+          <Card>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-text-primary">Recent Transactions</h2>
-              <Link href="/dashboard/transactions" className="text-sm font-medium text-green-primary hover:text-green-light">
-                View All →
+              <h2 className="text-lg font-semibold text-text-primary">
+                Recent Transactions
+              </h2>
+              <Link
+                href="/dashboard/transactions"
+                className="text-sm font-medium text-green-primary hover:text-green-light"
+              >
+                See All
               </Link>
             </div>
 
+            {/* Search */}
+            <div className="mb-4">
+              <Input
+                type="text"
+                placeholder="Search..."
+                icon={
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                }
+              />
+            </div>
+
             <div className="space-y-3">
-              {[
-                { merchant: "Uber Eats", amount: -5000, category: "Food", date: "Jan 28", icon: "🍔" },
-                { merchant: "Jumia Food", amount: -3500, category: "Food", date: "Jan 27", icon: "🍕" },
-                { merchant: "Uber", amount: -2000, category: "Transport", date: "Jan 26", icon: "🚗" },
-                { merchant: "DSTV", amount: -15000, category: "Bills", date: "Jan 23", icon: "📺" },
-                { merchant: "Netflix", amount: -3000, category: "Subscriptions", date: "Jan 22", icon: "🎬" },
-              ].map((txn, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-lg">
-                      {txn.icon}
-                    </div>
-                    <div>
-                      <p className="font-medium text-text-primary text-sm">{txn.merchant}</p>
-                      <p className="text-xs text-text-muted">{txn.category} • {txn.date}</p>
-                    </div>
-                  </div>
-                  <span className="font-semibold text-error">-₦{Math.abs(txn.amount).toLocaleString()}</span>
-                </div>
+              {transactions.map((txn, i) => (
+                <TransactionItem key={i} {...txn} />
               ))}
             </div>
-          </div>
+          </Card>
         </div>
 
-        {/* Right Column - Cards & Quick Actions */}
+        {/* Right Column - Cards & Insights */}
         <div className="space-y-6">
           {/* Virtual Card */}
-          <div className="rounded-xl bg-gradient-to-br from-green-dark to-green-secondary p-6 text-white shadow-lg">
-            <div className="mb-8 flex items-start justify-between">
-              <div>
-                <p className="text-sm font-medium">Flynt Card</p>
-                <p className="mt-1 text-xs opacity-80">Discretionary Spending</p>
-              </div>
-              <span className="rounded-full bg-green-light/20 px-3 py-1 text-xs font-semibold">Active</span>
-            </div>
-            <div className="mb-6">
-              <p className="text-xs opacity-80 mb-1">Available Balance</p>
-              <p className="text-3xl font-bold">₦57,000</p>
-              <p className="text-xs opacity-60 mt-1">of ₦90,000 allocated</p>
-            </div>
-            <div className="mb-6">
-              <div className="mb-2 flex justify-between text-xs">
-                <span className="opacity-80">Spent this month</span>
-                <span className="font-semibold">37%</span>
-              </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/20">
-                <div className="h-full w-[37%] rounded-full bg-green-light"></div>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="font-mono text-lg tracking-wider">•••• •••• •••• 4242</p>
-              <Link href="/dashboard/cards" className="text-xs font-medium text-green-light hover:text-white">
-                Manage →
-              </Link>
-            </div>
-          </div>
+          <VirtualCard
+            cards={[
+              {
+                id: "1",
+                category: "Discretionary Spending",
+                categoryIcon: "🛍️",
+                cardNumber: "2342********3675",
+                validThru: "12/24",
+                cvv: "***",
+                cardholderName: "Adebayo Odunsi",
+                balance: 57000,
+                totalAllocated: 90000,
+                spentPercentage: 37,
+                colorScheme: "purple",
+              },
+              {
+                id: "2",
+                category: "Fixed Obligations",
+                categoryIcon: "🏠",
+                cardNumber: "4521********7890",
+                validThru: "11/25",
+                cvv: "***",
+                cardholderName: "Adebayo Odunsi",
+                balance: 48000,
+                totalAllocated: 98000,
+                spentPercentage: 51,
+                colorScheme: "black",
+              },
+              {
+                id: "3",
+                category: "Daily Essentials",
+                categoryIcon: "🛒",
+                cardNumber: "6789********1234",
+                validThru: "03/26",
+                cvv: "***",
+                cardholderName: "Adebayo Odunsi",
+                balance: 42000,
+                totalAllocated: 75000,
+                spentPercentage: 44,
+                colorScheme: "orange",
+              },
+              {
+                id: "4",
+                category: "Savings & Investment",
+                categoryIcon: "💰",
+                cardNumber: "8901********5678",
+                validThru: "06/25",
+                cvv: "***",
+                cardholderName: "Adebayo Odunsi",
+                balance: 17000,
+                totalAllocated: 17000,
+                spentPercentage: 0,
+                colorScheme: "green",
+              },
+              {
+                id: "5",
+                category: "Lifestyle",
+                categoryIcon: "🎭",
+                cardNumber: "3456********9012",
+                validThru: "09/25",
+                cvv: "***",
+                cardholderName: "Adebayo Odunsi",
+                balance: 30000,
+                totalAllocated: 75000,
+                spentPercentage: 60,
+                colorScheme: "blue",
+              },
+            ]}
+          />
 
-          {/* Investment Insights */}
-          <div className="rounded-xl bg-gradient-to-br from-green-dark to-green-secondary p-6 text-white">
+          {/* AI Insights */}
+          <div className="rounded-xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white">
             <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="text-lg font-semibold mb-1">Investment Opportunities</h3>
-                <p className="text-sm opacity-90">AI-powered stock recommendations</p>
-              </div>
-              <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">New</span>
-            </div>
-
-            <div className="mb-4 space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="opacity-80">Potential Monthly Return</span>
-                <span className="font-semibold">+22.5%</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="opacity-80">Recommended Stocks</span>
-                <span className="font-semibold">5 Picks</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="opacity-80">AI Confidence</span>
-                <span className="font-semibold">83%</span>
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
               </div>
             </div>
 
-            <button
+            <h3 className="text-lg font-bold mb-2">AI Insights</h3>
+            <h2 className="text-2xl font-bold mb-3">
+              You can save
+              <br />
+              ₦45,000 this month
+            </h2>
+            <p className="text-sm opacity-90 mb-6">
+              Based on your spending patterns, redirecting some discretionary
+              spending could boost your savings significantly.
+            </p>
+
+            <Button
+              variant="secondary"
+              fullWidth
               onClick={() => setShowInvestmentModal(true)}
-              className="w-full rounded-lg bg-white px-4 py-3 font-semibold text-green-dark transition-colors hover:bg-green-light hover:text-bg-primary"
+              className="mb-4 bg-white text-green-dark hover:bg-green-light hover:text-bg-primary"
             >
-              View Investment Insights →
-            </button>
-          </div>
+              View Insights →
+            </Button>
 
-          {/* Quick Actions */}
-          <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-6">
-            <h3 className="text-sm font-semibold text-text-primary mb-4">Quick Actions</h3>
-            <div className="space-y-2">
-              <Link href="/dashboard/budget" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple/10">
-                  <svg className="h-5 w-5 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-text-primary">Adjust Budget</p>
-                  <p className="text-xs text-text-muted">Reallocate funds</p>
-                </div>
-              </Link>
-
-              <Link href="/dashboard/cards" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-primary/10">
-                  <svg className="h-5 w-5 text-green-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-text-primary">Create New Card</p>
-                  <p className="text-xs text-text-muted">For specific category</p>
-                </div>
-              </Link>
-
-              <Link href="/dashboard/insights" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange/10">
-                  <svg className="h-5 w-5 text-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-text-primary">View Predictions</p>
-                  <p className="text-xs text-text-muted">AI spending forecast</p>
-                </div>
-              </Link>
+            {/* Pagination dots */}
+            <div className="flex items-center justify-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-white"></div>
+              <div className="h-2 w-6 rounded-full bg-white/40"></div>
+              <div className="h-2 w-2 rounded-full bg-white/40"></div>
             </div>
           </div>
 
-          {/* Spending by Category */}
-          <div className="rounded-xl bg-white border border-gray-200 shadow-sm p-6">
-            <h3 className="text-sm font-semibold text-text-primary mb-4">Top Categories</h3>
-            <div className="space-y-3">
-              {[
-                { name: "Food & Dining", amount: 12450, percent: 41, color: "bg-orange" },
-                { name: "Transport", amount: 3500, percent: 12, color: "bg-blue" },
-                { name: "Bills", amount: 16500, percent: 55, color: "bg-purple" },
-              ].map((cat, i) => (
-                <div key={i}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs text-text-secondary">{cat.name}</span>
-                    <span className="text-xs font-semibold text-text-primary">₦{cat.amount.toLocaleString()}</span>
-                  </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
-                    <div className={`h-full rounded-full ${cat.color}`} style={{ width: `${cat.percent}%` }}></div>
-                  </div>
-                </div>
-              ))}
+          {/* Financial Health */}
+          <Card>
+            <div className="flex items-center gap-2 mb-6">
+              <svg
+                className="h-5 w-5 text-text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+              <h3 className="text-sm font-semibold text-text-primary">
+                Financial Health
+              </h3>
             </div>
-          </div>
+
+            <CreditScoreGauge score={660} />
+          </Card>
         </div>
       </div>
 
       {/* Investment Insights Modal */}
-      <InvestmentInsightsModal 
-        isOpen={showInvestmentModal} 
-        onClose={() => setShowInvestmentModal(false)} 
+      <InvestmentInsightsModal
+        isOpen={showInvestmentModal}
+        onClose={() => setShowInvestmentModal(false)}
+      />
+
+      {/* Create Debt Modal */}
+      <CreateDebtModal
+        isOpen={showDebtModal}
+        onClose={() => setShowDebtModal(false)}
       />
     </div>
   );

@@ -7,102 +7,115 @@
   --bg-secondary: #ffffff;
   --bg-card: #ffffff;
   --bg-elevated: #fafafa;
-  
+
   /* Green Branding */
-  --green-primary: #00D9A3;
-  --green-secondary: #00B386;
-  --green-light: #4DFFCD;
-  --green-dark: #008F6D;
+  --green-primary: #00d9a3;
+  --green-secondary: #00b386;
+  --green-light: #4dffcd;
+  --green-dark: #008f6d;
+  --green-hover: #00b386;
   --green-glow: rgba(0, 217, 163, 0.15);
-  
+
   /* Text Colors */
-  --text-primary: #1F2937;
-  --text-secondary: #4B5563;
-  --text-muted: #6B7280;
-  --text-inverse: #0A0E27;
-  
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --text-inverse: #0a0e27;
+
   /* Semantic Colors */
-  --success: #00D9A3;
-  --warning: #FFB020;
-  --error: #FF4757;
-  --info: #4C9AFF;
-  
+  --success: #00d9a3;
+  --warning: #ffb020;
+  --error: #ff4757;
+  --info: #4c9aff;
+
   /* Accent Colors */
-  --purple: #9D4EDD;
-  --blue: #4C9AFF;
-  --orange: #FFB020;
-  
+  --purple: #9d4edd;
+  --blue: #4c9aff;
+  --orange: #ffb020;
+
   /* Borders & Dividers */
   --border-color: rgba(0, 0, 0, 0.08);
   --border-hover: rgba(0, 0, 0, 0.12);
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --bg-hover: rgba(0, 0, 0, 0.05);
 }
 
 .dark {
   /* Dark Theme - Fintech Colors */
-  --bg-primary: #0A0E27;
+  --bg-primary: #0a0e27;
   --bg-secondary: #141829;
-  --bg-card: #1A1F3A;
-  --bg-elevated: #252B4A;
-  
+  --bg-card: #1a1f3a;
+  --bg-elevated: #252b4a;
+
   /* Green Branding (same) */
-  --green-primary: #00D9A3;
-  --green-secondary: #00B386;
-  --green-light: #4DFFCD;
-  --green-dark: #008F6D;
+  --green-primary: #00d9a3;
+  --green-secondary: #00b386;
+  --green-light: #4dffcd;
+  --green-dark: #008f6d;
+  --green-hover: #00b386;
   --green-glow: rgba(0, 217, 163, 0.15);
-  
+
   /* Text Colors */
-  --text-primary: #FFFFFF;
-  --text-secondary: #E5E7EB;
-  --text-muted: #9CA3AF;
-  --text-inverse: #0A0E27;
-  
+  --text-primary: #ffffff;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
+  --text-inverse: #0a0e27;
+
   /* Semantic Colors */
-  --success: #00D9A3;
-  --warning: #FFB020;
-  --error: #FF4757;
-  --info: #4C9AFF;
-  
+  --success: #00d9a3;
+  --warning: #ffb020;
+  --error: #ff4757;
+  --info: #4c9aff;
+
   /* Accent Colors */
-  --purple: #9D4EDD;
-  --blue: #4C9AFF;
-  --orange: #FFB020;
-  
+  --purple: #9d4edd;
+  --blue: #4c9aff;
+  --orange: #ffb020;
+
   /* Borders & Dividers */
   --border-color: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --bg-hover: rgba(255, 255, 255, 0.05);
 }
 
 @theme inline {
-  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
-  
+  --font-sans: var(--font-montserrat), system-ui, -apple-system, sans-serif;
+
   /* Background Colors */
   --color-bg-primary: var(--bg-primary);
   --color-bg-secondary: var(--bg-secondary);
   --color-bg-card: var(--bg-card);
   --color-bg-elevated: var(--bg-elevated);
-  
+
   /* Green Brand Colors */
   --color-green-primary: var(--green-primary);
   --color-green-secondary: var(--green-secondary);
   --color-green-light: var(--green-light);
   --color-green-dark: var(--green-dark);
-  
+  --color-green-hover: var(--green-hover);
+
   /* Text Colors */
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
-  
+
   /* Semantic Colors */
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
   --color-info: var(--info);
-  
+
   /* Accent Colors */
   --color-purple: var(--purple);
   --color-blue: var(--blue);
   --color-orange: var(--orange);
+
+  /* Border & Hover States */
+  --color-border-primary: var(--border-color);
+  --color-border-hover: var(--border-hover);
+  --color-border-subtle: var(--border-subtle);
+  --color-bg-hover: var(--bg-hover);
 }
 
 * {
@@ -112,7 +125,7 @@
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-feature-settings: 'cv11', 'ss01';
+  font-feature-settings: "cv11", "ss01";
   font-variant-numeric: tabular-nums;
 }
 
