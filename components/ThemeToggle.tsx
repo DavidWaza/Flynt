@@ -1,9 +1,36 @@
 "use client";
 
-import { useTheme } from "@/contexts/ThemeContext";
+import { useState, useEffect } from "react";
 
 export default function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    setMounted(true);
+    // Get theme from document class
+    if (document.documentElement.classList.contains("dark")) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  if (!mounted) {
+    return (
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg">
+        <div className="h-5 w-5" />
+      </div>
+    );
+  }
 
   return (
     <button
