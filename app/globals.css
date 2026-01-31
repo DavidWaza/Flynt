@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+:root,
+.light {
+  /* Light Theme - Fintech Colors */
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-elevated: #fafafa;
+  
+  /* Green Branding */
+  --green-primary: #00D9A3;
+  --green-secondary: #00B386;
+  --green-light: #4DFFCD;
+  --green-dark: #008F6D;
+  --green-glow: rgba(0, 217, 163, 0.15);
+  
+  /* Text Colors */
+  --text-primary: #1F2937;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --text-inverse: #0A0E27;
+  
+  /* Semantic Colors */
+  --success: #00D9A3;
+  --warning: #FFB020;
+  --error: #FF4757;
+  --info: #4C9AFF;
+  
+  /* Accent Colors */
+  --purple: #9D4EDD;
+  --blue: #4C9AFF;
+  --orange: #FFB020;
+  
+  /* Borders & Dividers */
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.12);
+}
+
+.dark {
+  /* Dark Theme - Fintech Colors */
+  --bg-primary: #0A0E27;
+  --bg-secondary: #141829;
+  --bg-card: #1A1F3A;
+  --bg-elevated: #252B4A;
+  
+  /* Green Branding (same) */
+  --green-primary: #00D9A3;
+  --green-secondary: #00B386;
+  --green-light: #4DFFCD;
+  --green-dark: #008F6D;
+  --green-glow: rgba(0, 217, 163, 0.15);
+  
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E5E7EB;
+  --text-muted: #9CA3AF;
+  --text-inverse: #0A0E27;
+  
+  /* Semantic Colors */
+  --success: #00D9A3;
+  --warning: #FFB020;
+  --error: #FF4757;
+  --info: #4C9AFF;
+  
+  /* Accent Colors */
+  --purple: #9D4EDD;
+  --blue: #4C9AFF;
+  --orange: #FFB020;
+  
+  /* Borders & Dividers */
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  
+  /* Background Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-elevated: var(--bg-elevated);
+  
+  /* Green Brand Colors */
+  --color-green-primary: var(--green-primary);
+  --color-green-secondary: var(--green-secondary);
+  --color-green-light: var(--green-light);
+  --color-green-dark: var(--green-dark);
+  
+  /* Text Colors */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  
+  /* Semantic Colors */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  
+  /* Accent Colors */
+  --color-purple: var(--purple);
+  --color-blue: var(--blue);
+  --color-orange: var(--orange);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border-color);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-feature-settings: 'cv11', 'ss01';
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
