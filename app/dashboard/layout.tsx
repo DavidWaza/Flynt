@@ -192,6 +192,13 @@ export default function DashboardLayout({
           <div className="flex h-16 items-center justify-between px-6">
             <div className="flex items-center gap-4">
               {/* <h1 className="text-lg font-semibold text-text-primary">Welcome back, Sarah</h1> */}
+              <p className="text-sm text-text-secondary font-bold">
+                Hello{" "}
+                <span className="uppercase text-[#4AD9A3]">
+                  Adebayo Odunsi,
+                </span>{" "}
+                welcome back to <span className="text-[#4AD9A3]">Flynt</span> 👋
+              </p>
             </div>
 
             <div className="flex items-center gap-3">

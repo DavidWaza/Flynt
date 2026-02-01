@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import InvestmentInsightsModal from "@/components/InvestmentInsightsModal";
 import { StatCard, Card, Input, Button } from "@/components/ui";
 import {
@@ -11,11 +12,23 @@ import {
   VirtualCard,
   InsightCard,
   CreateDebtModal,
+  AccountBreakdownModal,
 } from "@/components/dashboard";
 
 export default function DashboardPage() {
   const [showInvestmentModal, setShowInvestmentModal] = useState(false);
   const [showDebtModal, setShowDebtModal] = useState(false);
+  const [breakdownModal, setBreakdownModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    data: { name: string; icon: string; amount: number }[];
+  }>({ isOpen: false, title: "", data: [] });
+
+  const connectedAccounts = [
+    { name: "Zenith Bank", icon: "/banks/zenith.svg" },
+    { name: "GTBank", icon: "/banks/gtbank.jpeg" },
+    { name: "Access Bank", icon: "/banks/access.svg" },
+  ];
 
   // Category icons
   const categoryIcons = {
@@ -119,22 +132,76 @@ export default function DashboardPage() {
     },
   ];
 
+  const inflowBreakdown = [
+    { name: "Zenith Bank", icon: "/banks/zenith.svg", amount: 250000 },
+    { name: "GTBank", icon: "/banks/gtbank.jpeg", amount: 150000 },
+    { name: "Access Bank", icon: "/banks/access.svg", amount: 50000 },
+  ];
+
+  const outflowBreakdown = [
+    { name: "Zenith Bank", icon: "/banks/zenith.svg", amount: 180000 },
+    { name: "GTBank", icon: "/banks/gtbank.jpeg", amount: 95000 },
+    { name: "Access Bank", icon: "/banks/access.svg", amount: 30000 },
+  ];
+
+  const surplusBreakdown = [
+    { name: "Zenith Bank", icon: "/banks/zenith.svg", amount: 70000 },
+    { name: "GTBank", icon: "/banks/gtbank.jpeg", amount: 55000 },
+    { name: "Access Bank", icon: "/banks/access.svg", amount: 20000 },
+  ];
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-green-primary to-green-secondary flex items-center justify-center text-white font-semibold text-lg">
-            AO
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-text-primary">
-              Adebayo Odunsi
-            </h1>
-            <p className="text-sm text-text-secondary font-bold uppercase">
-              Welcome back to Flynt 👋
-            </p>
-          </div>
+        <div className="flex flex-wrap items-center gap-4 mb-1">
+          {connectedAccounts.map((account, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-2 bg-white/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2 shadow-sm"
+            >
+              <div className="h-11 w-11 rounded-full bg-white flex items-center justify-center shadow-inner overflow-hidden border border-gray-100 dark:border-white/10 shrink-0">
+                <Image
+                  src={account.icon}
+                  alt={account.name}
+                  width={28}
+                  height={28}
+                  className="object-contain"
+                />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-text-primary">
+                    {account.name}
+                  </h2>
+                  <span className="inline-flex items-center rounded-full bg-green-primary/10 px-2 py-0.5 text-[10px] font-medium text-green-primary border border-green-primary/20">
+                    Connected
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <button className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-text-secondary hover:border-green-primary hover:text-green-primary transition-all group">
+            <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-green-primary/10 transition-colors">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </div>
+            <span className="text-sm font-semibold italic">
+              Connect New Card
+            </span>
+          </button>
         </div>
 
         <Button
@@ -164,17 +231,38 @@ export default function DashboardPage() {
           title="Total Inflow"
           value={450000}
           trend={{ value: "+5.1% vs last month", isPositive: true }}
+          onClick={() =>
+            setBreakdownModal({
+              isOpen: true,
+              title: "Total Inflow Breakdown",
+              data: inflowBreakdown,
+            })
+          }
         />
         <StatCard
           title="Total Outflow"
           value={305000}
           trend={{ value: "+2% vs last month", isPositive: true }}
+          onClick={() =>
+            setBreakdownModal({
+              isOpen: true,
+              title: "Total Outflow Breakdown",
+              data: outflowBreakdown,
+            })
+          }
         />
         <StatCard
           title="Monthly Surplus"
           value={145000}
           subtitle="Safe to invest or save"
           variant="success"
+          onClick={() =>
+            setBreakdownModal({
+              isOpen: true,
+              title: "Monthly Surplus Breakdown",
+              data: surplusBreakdown,
+            })
+          }
         />
       </div>
 
@@ -354,7 +442,7 @@ export default function DashboardPage() {
           />
 
           {/* AI Insights */}
-          <div className="rounded-xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white">
+          <div className="rounded-3xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white">
             <div className="flex items-start justify-between mb-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
                 <svg
@@ -388,7 +476,7 @@ export default function DashboardPage() {
               variant="secondary"
               fullWidth
               onClick={() => setShowInvestmentModal(true)}
-              className="mb-4 bg-white text-green-dark hover:bg-green-light hover:text-bg-primary"
+              className="mb-4  text-green-dark hover:bg-green-light hover:text-bg-primary"
             >
               View Insights →
             </Button>
@@ -418,11 +506,14 @@ export default function DashboardPage() {
                 />
               </svg>
               <h3 className="text-sm font-semibold text-text-primary">
-                Financial Health
+                Credit Score
               </h3>
             </div>
 
             <CreditScoreGauge score={660} />
+            <p className="text-xs opacity-90 text-center pt-2 font-medium">
+              This credit score is gotten from the Nigerian Credit Bureau
+            </p>
           </Card>
         </div>
       </div>
@@ -437,6 +528,14 @@ export default function DashboardPage() {
       <CreateDebtModal
         isOpen={showDebtModal}
         onClose={() => setShowDebtModal(false)}
+      />
+
+      {/* Account Breakdown Modal */}
+      <AccountBreakdownModal
+        isOpen={breakdownModal.isOpen}
+        onClose={() => setBreakdownModal({ ...breakdownModal, isOpen: false })}
+        title={breakdownModal.title}
+        data={breakdownModal.data}
       />
     </div>
   );

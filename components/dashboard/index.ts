@@ -5,3 +5,4 @@ export { default as CreditScoreGauge } from "./CreditScoreGauge";
 export { default as VirtualCard } from "./VirtualCard";
 export { default as InsightCard } from "./InsightCard";
 export { default as CreateDebtModal } from "./CreateDebtModal";
+export { default as AccountBreakdownModal } from "./AccountBreakdownModal";

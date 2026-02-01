@@ -11,6 +11,7 @@ interface StatCardProps {
     isPositive?: boolean;
   };
   variant?: "default" | "success" | "warning" | "error" | "info";
+  onClick?: () => void;
 }
 
 export default function StatCard({
@@ -20,6 +21,7 @@ export default function StatCard({
   icon,
   trend,
   variant = "default",
+  onClick,
 }: StatCardProps) {
   const variantStyles = {
     default: "bg-bg-card border-border-primary",
@@ -43,7 +45,8 @@ export default function StatCard({
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className={`rounded-3xl border shadow-sm p-6 ${variantStyles[variant]}`}
+      onClick={onClick}
+      className={`rounded-3xl border shadow-sm p-6 ${variantStyles[variant]} ${onClick ? "cursor-pointer" : ""}`}
     >
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-text-secondary uppercase font-bold">
@@ -60,11 +63,16 @@ export default function StatCard({
         {typeof value === "number" ? `₦${value.toLocaleString()}` : value}
       </motion.div>
       {(subtitle || trend) && (
-        <p
-          className={`text-xs font-medium ${trend?.isPositive !== false ? "text-success" : "text-error"}`}
-        >
-          {trend?.value || subtitle}
-        </p>
+        <div className="flex items-center justify-between">
+          <p
+            className={`text-xs font-medium ${trend?.isPositive !== false ? "text-success" : "text-error"}`}
+          >
+            {trend?.value || subtitle}
+          </p>
+          <motion.p className="text-xs font-medium underline cursor-pointer text-orange-500">
+            Click to see full breakdown
+          </motion.p>
+        </div>
       )}
     </motion.div>
   );
