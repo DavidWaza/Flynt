@@ -9,10 +9,11 @@ import {
   CategoryCard,
   TransactionItem,
   CreditScoreGauge,
-  VirtualCard,
-  InsightCard,
   CreateDebtModal,
   AccountBreakdownModal,
+  LinkedAccountsCard,
+  UnlinkAccountModal,
+  type LinkedAccount,
 } from "@/components/dashboard";
 
 export default function DashboardPage() {
@@ -23,6 +24,33 @@ export default function DashboardPage() {
     title: string;
     data: { name: string; icon: string; amount: number }[];
   }>({ isOpen: false, title: "", data: [] });
+
+  const [linkedAccounts, setLinkedAccounts] = useState([
+    {
+      id: "1",
+      name: "GTBank",
+      icon: "/banks/gtbank.jpeg",
+      lastFour: "6789",
+      balance: 450000,
+    },
+    {
+      id: "2",
+      name: "Zenith Bank",
+      icon: "/banks/zenith.svg",
+      lastFour: "1234",
+      balance: 450000,
+    },
+  ]);
+
+  const [selectedAccountForUnlink, setSelectedAccountForUnlink] =
+    useState<LinkedAccount | null>(null);
+  const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
+
+  const handleUnlink = (id: string) => {
+    setLinkedAccounts(linkedAccounts.filter((a) => a.id !== id));
+    setIsUnlinkModalOpen(false);
+    setSelectedAccountForUnlink(null);
+  };
 
   const connectedAccounts = [
     { name: "Zenith Bank", icon: "/banks/zenith.svg" },
@@ -155,10 +183,10 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-4 mb-1">
-          {connectedAccounts.map((account, index) => (
+          {/* {connectedAccounts.map((account, index) => (
             <div
               key={index}
-              className="flex items-center gap-2 bg-white/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2 shadow-sm"
+              className="flex items-center gap-2 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2 shadow-sm"
             >
               <div className="h-11 w-11 rounded-full bg-white flex items-center justify-center shadow-inner overflow-hidden border border-gray-100 dark:border-white/10 shrink-0">
                 <Image
@@ -180,9 +208,9 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
 
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-text-secondary hover:border-green-primary hover:text-green-primary transition-all group">
+          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-primary/10 border-2 border-dashed border-gray-200 dark:border-white/10 text-text-secondary hover:border-green-primary hover:text-green-primary transition-all group">
             <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-green-primary/10 transition-colors">
               <svg
                 className="h-4 w-4"
@@ -371,7 +399,7 @@ export default function DashboardPage() {
         {/* Right Column - Cards & Insights */}
         <div className="space-y-6">
           {/* Virtual Card */}
-          <VirtualCard
+          {/* <VirtualCard
             cards={[
               {
                 id: "1",
@@ -439,53 +467,65 @@ export default function DashboardPage() {
                 colorScheme: "blue",
               },
             ]}
-          />
+          /> */}
 
           {/* AI Insights */}
-          <div className="rounded-3xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white shadow-lg">
+            {/* Doodle Background Pattern */}
+            <div
+              className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay"
+              style={{
+                backgroundImage: "url('/doodle.png')",
+                backgroundSize: "200px",
+                backgroundRepeat: "repeat",
+              }}
+            />
+
+            <div className="relative z-10">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
               </div>
-            </div>
 
-            <h3 className="text-lg font-bold mb-2">AI Insights</h3>
-            <h2 className="text-2xl font-bold mb-3">
-              You can save
-              <br />
-              ₦45,000 this month
-            </h2>
-            <p className="text-sm opacity-90 mb-6">
-              Based on your spending patterns, redirecting some discretionary
-              spending could boost your savings significantly.
-            </p>
+              <h3 className="text-lg font-bold mb-2">AI Insights</h3>
+              <h2 className="text-2xl font-bold mb-3">
+                You can save
+                <br />
+                ₦45,000 this month
+              </h2>
+              <p className="text-sm opacity-90 mb-6">
+                Based on your spending patterns, redirecting some discretionary
+                spending could boost your savings significantly.
+              </p>
 
-            <Button
-              variant="secondary"
-              fullWidth
-              onClick={() => setShowInvestmentModal(true)}
-              className="mb-4  text-green-dark hover:bg-green-light hover:text-bg-primary"
-            >
-              View Insights →
-            </Button>
+              <Button
+                variant="secondary"
+                fullWidth
+                onClick={() => setShowInvestmentModal(true)}
+                className="mb-4  text-green-dark hover:bg-green-light hover:text-bg-primary"
+              >
+                View Insights →
+              </Button>
 
-            {/* Pagination dots */}
-            <div className="flex items-center justify-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-white"></div>
-              <div className="h-2 w-6 rounded-full bg-white/40"></div>
-              <div className="h-2 w-2 rounded-full bg-white/40"></div>
+              {/* Pagination dots */}
+              <div className="flex items-center justify-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-white"></div>
+                <div className="h-2 w-6 rounded-full bg-white/40"></div>
+                <div className="h-2 w-2 rounded-full bg-white/40"></div>
+              </div>
             </div>
           </div>
 
@@ -515,6 +555,16 @@ export default function DashboardPage() {
               This credit score is gotten from the Nigerian Credit Bureau
             </p>
           </Card>
+
+          {/* Linked Accounts */}
+          <LinkedAccountsCard
+            accounts={linkedAccounts}
+            onAddAccount={() => {}}
+            onSelectAccount={(account) => {
+              setSelectedAccountForUnlink(account);
+              setIsUnlinkModalOpen(true);
+            }}
+          />
         </div>
       </div>
 
@@ -536,6 +586,14 @@ export default function DashboardPage() {
         onClose={() => setBreakdownModal({ ...breakdownModal, isOpen: false })}
         title={breakdownModal.title}
         data={breakdownModal.data}
+      />
+
+      {/* Unlink Account Modal */}
+      <UnlinkAccountModal
+        isOpen={isUnlinkModalOpen}
+        onClose={() => setIsUnlinkModalOpen(false)}
+        account={selectedAccountForUnlink}
+        onUnlink={handleUnlink}
       />
     </div>
   );
