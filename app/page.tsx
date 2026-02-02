@@ -14,10 +14,18 @@ export default function Home() {
             <Image
               src="/logo.png"
               alt="Flynt"
-              width={120}
-              height={40}
-              priority
-              className="h-10 w-auto"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-auto w-[25%] object-contain dark:hidden"
+            />
+            <Image
+              src="/logo-white.png"
+              alt="Flynt"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-auto w-[25%] object-contain hidden dark:block"
             />
           </div>
           <div className="flex items-center gap-3">
@@ -46,7 +54,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/dashboard"
+              href="/login"
               className="w-full rounded-lg bg-green-primary px-8 py-4 text-lg font-semibold text-bg-primary transition-all hover:bg-green-light sm:w-auto"
             >
               Try Demo →
