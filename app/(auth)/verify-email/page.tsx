@@ -43,7 +43,7 @@ function SuccessSection({ email }: { email: string }) {
 	const router = useRouter();
 
 	const handleContinue = useCallback(() => {
-		router.push("/dashboard");
+		router.push("/onboard");
 	}, [router]);
 
 	const handleKeyDown = useCallback(
@@ -81,7 +81,7 @@ function SuccessSection({ email }: { email: string }) {
 				className="mt-8 cursor-pointer"
 				onClick={handleContinue}
 				onKeyDown={handleKeyDown}
-				aria-label="Continue to dashboard"
+				aria-label="Continue to onboarding"
 				tabIndex={0}
 			>
 				Continue
