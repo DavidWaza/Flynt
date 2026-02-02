@@ -14,10 +14,18 @@ export default function Home() {
             <Image
               src="/logo.png"
               alt="Flynt"
-              width={120}
-              height={40}
-              priority
-              className="h-10 w-auto"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-auto w-[25%] object-contain dark:hidden"
+            />
+            <Image
+              src="/logo-white.png"
+              alt="Flynt"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-auto w-[25%] object-contain hidden dark:block"
             />
           </div>
           <div className="flex items-center gap-3">
