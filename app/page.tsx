@@ -46,7 +46,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/dashboard"
+              href="/login"
               className="w-full rounded-lg bg-green-primary px-8 py-4 text-lg font-semibold text-bg-primary transition-all hover:bg-green-light sm:w-auto"
             >
               Try Demo →
