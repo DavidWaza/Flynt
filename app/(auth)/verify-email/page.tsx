@@ -78,7 +78,7 @@ function SuccessSection({ email }: { email: string }) {
 				variant="primary"
 				fullWidth
 				size="lg"
-				className="mt-8"
+				className="mt-8 cursor-pointer"
 				onClick={handleContinue}
 				onKeyDown={handleKeyDown}
 				aria-label="Continue to dashboard"
@@ -189,7 +189,7 @@ function VerifyForm({
 				<MailIcon />
 			</div>
 			<h1 className="text-xl font-bold text-text-primary">Verify your email</h1>
-			<p className="mt-2 text-sm text-text-secondary">
+			<p className="mt-2 text-sm text-text-secondary text-center">
 				We&apos;ve sent a 6-digit code to{" "}
 				<strong className="text-text-primary">{displayEmail}</strong>
 			</p>
@@ -223,7 +223,7 @@ function VerifyForm({
 				variant="primary"
 				fullWidth
 				size="lg"
-				className="mt-6"
+				className="mt-6 cursor-pointer"
 				onClick={handleVerify}
 				disabled={!canVerify}
 				aria-label="Verify code"
@@ -249,7 +249,7 @@ function VerifyForm({
 								handleResend();
 							}
 						}}
-						className="mt-1 text-sm font-semibold text-green-primary hover:text-green-hover focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded"
+						className="mt-1 text-sm font-semibold text-green-primary hover:text-green-hover focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded cursor-pointer"
 						aria-label="Resend code"
 					>
 						Resend code
