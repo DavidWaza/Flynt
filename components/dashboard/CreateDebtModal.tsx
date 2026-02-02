@@ -9,11 +9,13 @@ import { useDebts, Importance } from "@/contexts/DebtContext";
 interface CreateDebtModalProps {
   isOpen: boolean;
   onClose: () => void;
+  financialData: { surplus: number; totalInflow: number };
 }
 
 export default function CreateDebtModal({
   isOpen,
   onClose,
+  financialData,
 }: CreateDebtModalProps) {
   const { addDebt } = useDebts();
   const [formData, setFormData] = useState({
@@ -31,12 +33,15 @@ export default function CreateDebtModal({
     }
 
     try {
-      addDebt({
-        name: formData.name,
-        amount: parseFloat(formData.amount),
-        deadline: formData.deadline,
-        importance: formData.importance,
-      });
+      addDebt(
+        {
+          name: formData.name,
+          amount: parseFloat(formData.amount),
+          deadline: formData.deadline,
+          importance: formData.importance,
+        },
+        financialData,
+      );
 
       toast.success("Debt note added successfully!");
 

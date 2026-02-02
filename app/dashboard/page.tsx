@@ -13,10 +13,13 @@ import {
   AccountBreakdownModal,
   LinkedAccountsCard,
   UnlinkAccountModal,
+  DebtDecisionCard,
   type LinkedAccount,
 } from "@/components/dashboard";
+import { useDebts } from "@/contexts/DebtContext";
 
 export default function DashboardPage() {
+  const { debts, deleteDebt } = useDebts();
   const [showInvestmentModal, setShowInvestmentModal] = useState(false);
   const [showDebtModal, setShowDebtModal] = useState(false);
   const [breakdownModal, setBreakdownModal] = useState<{
@@ -51,12 +54,6 @@ export default function DashboardPage() {
     setIsUnlinkModalOpen(false);
     setSelectedAccountForUnlink(null);
   };
-
-  const connectedAccounts = [
-    { name: "Zenith Bank", icon: "/banks/zenith.svg" },
-    { name: "GTBank", icon: "/banks/gtbank.jpeg" },
-    { name: "Access Bank", icon: "/banks/access.svg" },
-  ];
 
   // Category icons
   const categoryIcons = {
@@ -298,6 +295,47 @@ export default function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Left Column - Spending Breakdown */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Debt Decisions - Intelligence Layer */}
+          {debts.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-sm font-black text-text-secondary uppercase tracking-widest">
+                  Debt Intelligence
+                </h3>
+                {debts.length > 2 && (
+                  <Link
+                    href="/dashboard/debts"
+                    className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-green-primary transition-opacity hover:opacity-80"
+                  >
+                    See All ({debts.length})
+                    <svg
+                      className="h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </Link>
+                )}
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {debts.slice(0, 2).map((debt) => (
+                  <DebtDecisionCard
+                    key={debt.id}
+                    debt={debt}
+                    onPay={deleteDebt}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Spending Breakdown */}
           <div>
             <h2 className="text-lg font-semibold text-text-primary mb-4">
@@ -578,6 +616,7 @@ export default function DashboardPage() {
       <CreateDebtModal
         isOpen={showDebtModal}
         onClose={() => setShowDebtModal(false)}
+        financialData={{ surplus: 145000, totalInflow: 450000 }}
       />
 
       {/* Account Breakdown Modal */}
