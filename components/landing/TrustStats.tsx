@@ -28,22 +28,22 @@ const stats = [
 
 export default function TrustStats() {
   return (
-    <section className="relative bg-white dark:bg-[#0A0D27] py-24 lg:py-32 overflow-hidden">
+    <section className="relative bg-bg-primary dark:bg-[#0A0D27] py-24 lg:py-32 overflow-hidden">
       {/* Decorative background element */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
 
       <div className="container mx-auto max-w-6xl px-6">
         {/* INSTITUTIONAL TRUST BAR */}
-        <div className="mb-24">
+        <div className="">
           <div className="flex flex-col items-center">
-            <div className="flex items-center gap-3 mb-8">
+            {/* <div className="flex items-center gap-3 mb-8">
               <Globe className="w-3 h-3 text-slate-400 animate-spin-slow" />
               <span className="text-[10px] font-mono font-bold uppercase tracking-[0.4em] text-slate-500 dark:text-slate-500">
                 Verified Bank Integrations
               </span>
-            </div>
+            </div> */}
 
-            <div className="flex flex-wrap items-center justify-center gap-12 md:gap-20 opacity-40 dark:opacity-30 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700">
+            {/* <div className="flex flex-wrap items-center justify-center gap-12 md:gap-20 opacity-40 dark:opacity-30 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700">
               <Image
                 src="/banks/zenith.svg"
                 alt="Zenith"
@@ -65,19 +65,19 @@ export default function TrustStats() {
                 height={30}
                 className="object-contain"
               />
-              {/* <Image
+              <Image
                 src="/banks/uba.png"
                 alt="UBA"
                 width={80}
                 height={30}
                 className="object-contain"
-              /> */}
-            </div>
+              />
+            </div> */}
           </div>
         </div>
 
         {/* STATS INFRASTRUCTURE */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
           {stats.map((stat, i) => (
             <motion.div
               key={i}
@@ -103,18 +103,18 @@ export default function TrustStats() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </div> */}
 
         {/* THE FINAL CALL TO ACTION: "THE VAULT" */}
         <div className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
 
-          <div className="relative rounded-2xl border border-slate-900 dark:border-white/10 bg-slate-950 dark:bg-[#0E1233] p-12 lg:p-20 overflow-hidden text-center">
+          <div className="relative rounded-2xl border border-slate-900 dark:border-white/10 bg-bg-secondary dark:bg-[#0E1233] p-12 lg:p-20 overflow-hidden text-center">
             {/* Grid Pattern Overlay */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
             <div className="relative z-10 max-w-2xl mx-auto">
-              <h2 className="mb-6 text-4xl font-medium tracking-tight text-white md:text-5xl">
+              <h2 className="mb-6 text-4xl font-medium tracking-tight text-text-secondary md:text-5xl">
                 Deploy the{" "}
                 <span className="text-emerald-400 font-serif italic">
                   Flynt Protocol.
@@ -135,13 +135,13 @@ export default function TrustStats() {
                 </a>
                 <a
                   href="/register"
-                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-sm border border-white/20 bg-transparent px-10 py-5 text-[11px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-white/10"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-sm border border-white/20 bg-transparent px-10 py-5 text-[11px] font-black uppercase tracking-[0.2em] text-text-secondary transition hover:bg-white/10"
                 >
                   View Demo
                 </a>
               </div>
 
-              <div className="mt-12 flex items-center justify-center gap-4 py-4 border-t border-white/5 opacity-40">
+              {/* <div className="mt-12 flex items-center justify-center gap-4 py-4 border-t border-white/5 opacity-40">
                 <div className="flex items-center gap-2">
                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   <span className="text-[9px] font-mono text-white uppercase tracking-widest">
@@ -154,7 +154,7 @@ export default function TrustStats() {
                     Encrypted via RSA-4096
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

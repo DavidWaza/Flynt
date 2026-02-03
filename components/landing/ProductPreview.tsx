@@ -52,19 +52,19 @@ const layers = [
 
 export default function ProductPreview() {
   return (
-    <section className="bg-white dark:bg-[#0A0D27] py-24 lg:py-32 border-t border-slate-100 dark:border-white/5">
+    <section className="bg-bg-primary dark:bg-[#0A0D27] py-24 lg:py-32 border-t border-slate-100 dark:border-white/5">
       <div className="container mx-auto max-w-7xl px-6">
         
         {/* SECTION HEADER */}
         <div className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
           <div>
             <div className="flex items-center gap-2 mb-4 text-emerald-500">
-              <Terminal className="w-4 h-4" />
+              {/* <Terminal className="w-4 h-4" />
               <span className="text-[10px] font-mono font-bold uppercase tracking-[0.3em]">
                 Live OS Preview
-              </span>
+              </span> */}
             </div>
-            <h3 className="text-4xl font-medium tracking-tight text-slate-900 dark:text-white md:text-5xl">
+            <h3 className="text-4xl font-medium tracking-tight text-text-secondary dark:text-white md:text-5xl">
               Fragmented data, <br />
               <span className="text-slate-400 font-light italic">unified intelligence.</span>
             </h3>
@@ -86,7 +86,7 @@ export default function ProductPreview() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className="group relative flex flex-col rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0D1131]/40 overflow-hidden"
+              className="group relative flex flex-col rounded-xl border border-slate-200 dark:border-white/10 bg-bg-secondary dark:bg-[#0D1131]/40 overflow-hidden"
             >
               {/* TOP: "Screen" Area */}
               <div className="relative p-6 pt-8 flex flex-col items-center justify-center border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02]">
@@ -102,10 +102,10 @@ export default function ProductPreview() {
                 </div>
 
                 <div className="text-center space-y-1">
-                  <div className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-tighter italic">
+                  <div className="text-[10px] font-mono font-bold text-text-secondary uppercase tracking-tighter italic">
                     {layer.subtitle}
                   </div>
-                  <div className="text-xl font-mono font-bold text-slate-900 dark:text-white tracking-tight">
+                  <div className="text-xl font-mono font-bold text-text-secondary dark:text-white tracking-tight">
                     {layer.value}
                   </div>
                 </div>
