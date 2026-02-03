@@ -2,32 +2,21 @@
 
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
+import { HeaderLogo } from "@/components/HeaderLogo";
 import Hero from "@/components/landing/Hero";
 import HowItWorks from "@/components/landing/HowItWorks";
 import CoreCapabilities from "@/components/landing/CoreCapabilities";
 import ProductPreview from "@/components/landing/ProductPreview";
 import TrustStats from "@/components/landing/TrustStats";
 
-const LOGO_WIDTH = 120;
-const LOGO_HEIGHT = 40;
-
 export default function Home() {
 	return (
 		<div className="min-h-screen bg-bg-primary">
 			{/* Header */}
-			<header className="container px-4 py-6 mx-auto max-w-7xl sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-border-subtle">
-				<div className="flex items-center justify-between">
+			<header className="sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-border-subtle">
+				<div className="container px-4 py-6 mx-auto max-w-7xl flex items-center justify-between">
 					<div className="flex items-center gap-4">
-						<div
-							className="shrink-0 bg-contain bg-no-repeat bg-center"
-							style={{
-								width: LOGO_WIDTH,
-								height: LOGO_HEIGHT,
-								backgroundImage: "var(--header-logo-url)",
-							}}
-							role="img"
-							aria-label="Flynt"
-						/>
+						<HeaderLogo />
 					</div>
 					<div className="flex items-center gap-3">
 						<ThemeToggle />
