@@ -25,7 +25,7 @@ export default function DashboardLayout({
     },
     { href: "/dashboard/budget", label: "Budget", icon: "budget" },
     { href: "/dashboard/debts", label: "Debts", icon: "debts" },
-    { href: "/dashboard/cards", label: "Cards", icon: "cards" },
+    // { href: "/dashboard/cards", label: "Cards", icon: "cards" },
     { href: "/dashboard/insights", label: "Insights", icon: "insights" },
   ];
 

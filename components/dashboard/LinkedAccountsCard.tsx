@@ -56,13 +56,6 @@ export default function LinkedAccountsCard({
               <div className="h-12 w-12 rounded-full bg-green-primary/10 flex items-center justify-center border border-green-primary/20 group-hover:scale-105 transition-transform">
                 {/* Fallback to simple icon if image fails */}
                 <div className="p-2 rounded-lg text-white">
-                  {/* <svg
-                    className="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M12 3L4 9v12h16V9l-8-6zm0 2.5L17.5 9.5 12 13.6 6.5 9.5 12 5.5zM6 19v-8.4l6 4.5 6-4.5V19H6z" />
-                  </svg> */}
                   <Image
                     src={account.icon}
                     alt={account.name}

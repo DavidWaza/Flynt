@@ -1,190 +1,228 @@
 "use client";
 
 import { useDebts, Importance } from "@/contexts/DebtContext";
-import { Card } from "@/components/ui";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import {
+  AlertTriangle,
+  Calendar,
+  Trash2,
+  CheckCircle2,
+  TrendingDown,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
+
+// Helper for dynamic styling based on weight
+const getWeightConfig = (importance: Importance) => {
+  const configs: Record<
+    Importance,
+    { accent: string; bg: string; border: string; glow: string; label: string }
+  > = {
+    critical: {
+      accent: "text-red-500",
+      bg: "bg-red-500/10",
+      border: "border-red-500/20",
+      glow: "shadow-red-500/10",
+      label: "Urgent Action Required",
+    },
+    high: {
+      accent: "text-orange-500",
+      bg: "bg-orange-500/10",
+      border: "border-orange-500/20",
+      glow: "shadow-orange-500/10",
+      label: "Priority Obligation",
+    },
+    medium: {
+      accent: "text-yellow-500",
+      bg: "bg-yellow-500/10",
+      border: "border-yellow-500/20",
+      glow: "shadow-yellow-500/10",
+      label: "Standard Debt",
+    },
+    low: {
+      accent: "text-blue-500",
+      bg: "bg-blue-500/10",
+      border: "border-blue-500/20",
+      glow: "shadow-blue-500/10",
+      label: "Flexible Terms",
+    },
+  };
+  return configs[importance] || configs.medium;
+};
 
 export default function DebtsPage() {
   const { debts, deleteDebt } = useDebts();
-
-  const handleDelete = (id: string, name: string) => {
-    const isConfirmed = window.confirm(
-      `Are you sure you have cleared the debt for "${name}"?`,
-    );
-    if (isConfirmed) {
-      deleteDebt(id);
-      toast.success(`Debt note for "${name}" removed successfully!`);
-    }
-  };
-
-  const getImportanceStyles = (importance: Importance) => {
-    switch (importance) {
-      case "critical":
-        return {
-          bg: "bg-error/10",
-          text: "text-error",
-          border: "border-error/20",
-          dot: "bg-error",
-        };
-      case "high":
-        return {
-          bg: "bg-orange/10",
-          text: "text-orange",
-          border: "border-orange/20",
-          dot: "bg-orange",
-        };
-      case "medium":
-        return {
-          bg: "bg-warning/10",
-          text: "text-warning",
-          border: "border-warning/20",
-          dot: "bg-warning",
-        };
-      case "low":
-        return {
-          bg: "bg-blue/10",
-          text: "text-blue",
-          border: "border-blue/20",
-          dot: "bg-blue",
-        };
-      default:
-        return {
-          bg: "bg-bg-elevated",
-          text: "text-text-secondary",
-          border: "border-border-primary",
-          dot: "bg-text-muted",
-        };
-    }
-  };
-
   const totalDebt = debts.reduce((sum, debt) => sum + debt.amount, 0);
 
+  const handleDelete = (id: string, name: string) => {
+    // In a real Flynt UI, we'd use a custom Modal, but keeping logic consistent
+    if (window.confirm(`Confirm full settlement for "${name}"?`)) {
+      deleteDebt(id);
+      toast.success(`Debt for ${name} cleared from ledger.`);
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="max-w-7xl mx-auto p-6 space-y-10">
+      {/* Header Ledger Summary */}
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary uppercase tracking-tight">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingDown className="text-red-500" size={20} />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+              Liability Tracker
+            </span>
+          </div>
+          <h1 className="text-4xl font-black tracking-tight text-text-secondary dark:text-white">
             Debt Notes
           </h1>
-          <p className="text-sm text-text-secondary">
-            Track and manage your outstanding obligations
-          </p>
         </div>
-        <div className="text-right">
-          <p className="text-xs font-bold text-text-muted uppercase mb-1">
-            Total Debt
-          </p>
-          <p className="text-2xl font-extrabold text-error">
-            ₦{totalDebt.toLocaleString()}
-          </p>
+
+        <div className="bg-bg-secondary dark:bg-[#0D1131] border border-slate-200 dark:border-white/5 p-4 rounded-xl  flex items-center gap-6">
+          <div className="pr-6 border-r border-slate-100 dark:border-white/5">
+            <p className="text-[10px] font-bold uppercase text-slate-400 mb-1">
+              Outstanding
+            </p>
+            <p className="text-2xl font-mono font-bold text-red-500">
+              ₦{totalDebt.toLocaleString()}
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase text-slate-400 mb-1">
+              Active Notes
+            </p>
+            <p className="text-2xl font-mono font-bold text-text-secondary dark:text-white">
+              {debts.length}
+            </p>
+          </div>
         </div>
-      </div>
+      </header>
 
       {debts.length === 0 ? (
-        <Card className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="h-16 w-16 rounded-full bg-bg-elevated flex items-center justify-center mb-4">
-            <svg
-              className="h-8 w-8 text-text-muted"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="py-24 flex flex-col bg-bg-secondary dark:bg-[#0D1131] items-center border-2 border-dashed border-slate-200 dark:border-white/5 rounded-xl"
+        >
+          <div className="h-16 w-16 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mb-4">
+            <CheckCircle2 size={32} />
           </div>
-          <h3 className="text-lg font-bold text-text-primary mb-1">
-            No debt notes found
-          </h3>
-          <p className="text-sm text-text-secondary mb-6">
-            Create your first debt note from the dashboard
+          <h2 className="text-xl font-bold text-text-secondary dark:text-white">Clean Slate</h2>
+          <p className="text-slate-500 text-sm">
+            You have no outstanding debt notes at this time.
           </p>
-        </Card>
+        </motion.div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {debts.map((debt) => {
-            const styles = getImportanceStyles(debt.importance);
-            return (
-              <motion.div
-                key={debt.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                layout
-              >
-                <Card className="h-full hover:border-border-hover transition-colors">
-                  <div className="flex items-start justify-between mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <AnimatePresence mode="popLayout">
+            {debts.map((debt) => {
+              const config = getWeightConfig(debt.importance);
+              const isOverdue = new Date(debt.deadline) < new Date();
+
+              return (
+                <motion.div
+                  key={debt.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.9,
+                    transition: { duration: 0.2 },
+                  }}
+                  className={`group relative bg-white dark:bg-[#0D1131] border-t-4 ${config.border.replace("border-", "border-t-")} border-x border-b border-slate-200 dark:border-white/5 p-6 rounded-xl hover:shadow-2xl ${config.glow} transition-all`}
+                >
+                  <div className="flex justify-between items-start mb-6">
                     <div
-                      className={`flex items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${styles.bg} ${styles.text} border ${styles.border}`}
+                      className={`${config.bg} ${config.accent} px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider`}
                     >
-                      <div
-                        className={`h-1.5 w-1.5 rounded-full ${styles.dot}`}
-                      />
-                      {debt.importance}
+                      {config.label}
                     </div>
                     <button
                       onClick={() => handleDelete(debt.id, debt.name)}
-                      className="text-text-muted hover:text-error transition-colors p-1"
-                      title="Delete note"
+                      className="opacity-0 group-hover:opacity-100 p-2 text-slate-400 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all"
                     >
-                      <svg
-                        className="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
+                      <Trash2 size={16} />
                     </button>
                   </div>
 
-                  <h3 className="text-lg font-bold text-text-primary mb-1 uppercase truncate">
-                    {debt.name}
-                  </h3>
-                  <p className="text-3xl font-extrabold text-text-primary mb-4">
-                    ₦{debt.amount.toLocaleString()}
-                  </p>
-
-                  <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wide">
-                    <div className="flex items-center gap-1.5 text-text-secondary">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
-                      {new Date(debt.deadline).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </div>
-                    {new Date(debt.deadline) < new Date() && (
-                      <span className="text-error">Overdue</span>
-                    )}
+                  <div className="space-y-1 mb-6">
+                    <h3 className="text-sm font-bold text-slate-500 uppercase tracking-tight">
+                      {debt.name}
+                    </h3>
+                    <p className="text-3xl font-mono font-bold text-slate-900 dark:text-white">
+                      ₦{debt.amount.toLocaleString()}
+                    </p>
                   </div>
-                </Card>
-              </motion.div>
-            );
-          })}
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between text-[11px] font-bold">
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <Calendar size={14} />
+                        <span>
+                          Due {new Date(debt.deadline).toLocaleDateString()}
+                        </span>
+                      </div>
+                      {isOverdue && (
+                        <div className="flex items-center gap-1 text-red-500 animate-pulse">
+                          <AlertTriangle size={14} />
+                          <span>OVERDUE</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Visual Progress Bar - Represents "Time to Deadline" */}
+                    <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: "65%" }} // Logic could be (TimeElapsed / TotalTime)
+                        className={`h-full ${isOverdue ? "bg-red-500" : "bg-slate-400"}`}
+                      />
+                    </div>
+
+                    <button className="w-full group/btn flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 text-xs font-bold hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all">
+                      Settle Note
+                      <ArrowRight
+                        size={14}
+                        className="group-hover/btn:translate-x-1 transition-transform"
+                      />
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
       )}
+
+      {/* Debt Strategy Tips */}
+      <footer className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-6 rounded-xl bg-bg-secondary dark:bg-slate-900 text-white flex gap-4 items-start">
+          <div className="p-3 bg-bg-primary rounded-xl text-yellow-400">
+            <Clock size={24} />
+          </div>
+          <div>
+            <h4 className="font-bold mb-1 text-text-secondary dark:text-slate-300">Snowball Method</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Pay off your smallest debts first to build momentum. The
+              psychological win of clearing a note is powerful.
+            </p>
+          </div>
+        </div>
+        <div className="p-6 rounded-xl bg-bg-secondary dark:bg-slate-900 border border-slate-200 dark:border-white/5 dark:text-white flex gap-4 items-start">
+          <div className="p-3 bg-slate-100 dark:bg-white/5 rounded-xl text-blue-500">
+            <AlertTriangle size={24} />
+          </div>
+          <div>
+            <h4 className="font-bold mb-1 text-text-secondary dark:text-slate-300">Interest Warning</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Unsettled debts can impact your internal Flynt credit score. Aim
+              to clear &quot;Critical&quot; notes 48 hours before deadline.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
