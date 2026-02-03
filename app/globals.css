@@ -122,6 +122,31 @@
   border-color: var(--border-color);
 }
 
+/* Utility aliases that map to theme variables used throughout the codebase */
+.text-text-primary { color: var(--text-primary); }
+.text-text-secondary { color: var(--text-secondary); }
+.text-text-muted { color: var(--text-muted); }
+
+.bg-bg-primary { background-color: var(--bg-primary); }
+.bg-bg-secondary { background-color: var(--bg-secondary); }
+.bg-bg-card { background-color: var(--bg-card); }
+.bg-bg-elevated { background-color: var(--bg-elevated); }
+
+.border-border-primary { border-color: var(--border-color); }
+.border-border-subtle { border-color: var(--border-subtle); }
+.border-border-hover { border-color: var(--border-hover); }
+
+.bg-green-primary { background-color: var(--green-primary); }
+.bg-green-secondary { background-color: var(--green-secondary); }
+.text-green-primary { color: var(--green-primary); }
+.text-green-secondary { color: var(--green-secondary); }
+
+.bg-hover { background-color: var(--bg-hover); }
+
+/* Accent/glow helpers */
+.glow-green { box-shadow: 0 8px 28px rgba(15,157,104,0.08); }
+
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
