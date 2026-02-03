@@ -508,7 +508,7 @@ export default function DashboardPage() {
           /> */}
 
           {/* AI Insights */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white shadow-lg">
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white shadow-lg">
             {/* Doodle Background Pattern */}
             <div
               className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay"

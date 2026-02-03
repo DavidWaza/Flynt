@@ -48,7 +48,7 @@ export default function DebtDecisionCard({
         </div>
       </div>
 
-      <div className="mb-6 p-4 rounded-2xl bg-bg-elevated border border-border-primary">
+      <div className="mb-6 p-4 rounded-xl bg-bg-elevated border border-border-primary">
         <div className="flex items-center gap-2 mb-2">
           <div
             className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-wider ${getBadgeStyles(debt.recommendation)}`}

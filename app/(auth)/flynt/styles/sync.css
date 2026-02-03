@@ -1,0 +1,51 @@
+body {
+  background-color: #f9f9f9;
+  font-family: 'Arial', sans-serif;
+}
+
+.sync-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.sync-animation {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress {
+  height: 10px;
+  background-color: #4caf50;
+  width: 0;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+}

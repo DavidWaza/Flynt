@@ -46,7 +46,7 @@ export default function StatCard({
       transition={{ duration: 0.3, ease: "easeOut" }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       onClick={onClick}
-      className={`rounded-3xl border shadow-sm p-6 ${variantStyles[variant]} ${onClick ? "cursor-pointer" : ""}`}
+      className={`rounded-xl border shadow-sm p-6 ${variantStyles[variant]} ${onClick ? "cursor-pointer" : ""}`}
     >
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-text-secondary uppercase font-bold">

@@ -50,7 +50,7 @@ export default function LinkedAccountsCard({
           <div
             key={account.id}
             onClick={() => onSelectAccount(account)}
-            className="flex items-center justify-between p-3 rounded-2xl bg-bg-elevated border border-border-primary hover:border-green-primary/30 transition-all group cursor-pointer"
+            className="flex items-center justify-between p-3 rounded-xl bg-bg-elevated border border-border-primary hover:border-green-primary/30 transition-all group cursor-pointer"
           >
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 rounded-full bg-green-primary/10 flex items-center justify-center border border-green-primary/20 group-hover:scale-105 transition-transform">
@@ -108,7 +108,7 @@ export default function LinkedAccountsCard({
         variant="secondary"
         fullWidth
         onClick={onAddAccount}
-        className="py-3 rounded-2xl bg-transparent border-dashed border-2 border-border-primary hover:border-green-primary hover:bg-green-primary/5 text-text-secondary hover:text-green-primary flex items-center justify-center gap-2"
+        className="py-3 rounded-xl bg-transparent border-dashed border-2 border-border-primary hover:border-green-primary hover:bg-green-primary/5 text-text-secondary hover:text-green-primary flex items-center justify-center gap-2"
       >
         <svg
           className="w-5 h-5"

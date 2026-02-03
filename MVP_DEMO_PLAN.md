@@ -568,7 +568,7 @@ export function VirtualCard({ card }: { card: VirtualCard }) {
   const percentUsed = (card.spentAmount / card.allocatedAmount) * 100;
   
   return (
-    <div className="relative aspect-[1.586] rounded-2xl bg-gradient-to-br from-brand-deep-teal to-brand-teal p-6 text-white">
+    <div className="relative aspect-[1.586] rounded-xl bg-gradient-to-br from-brand-deep-teal to-brand-teal p-6 text-white">
       <div className="flex justify-between items-start">
         <div>
           <p className="text-sm opacity-80">Flynt Card</p>

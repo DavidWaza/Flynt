@@ -174,7 +174,7 @@ export default function InvestmentInsightsModal({ isOpen, onClose }: InvestmentI
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden rounded-2xl bg-bg-secondary border border-white/10 shadow-2xl">
+      <div className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden rounded-xl bg-bg-secondary border border-white/10 shadow-2xl">
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-bg-secondary/95 backdrop-blur-xl p-6">
           <div>

@@ -19,7 +19,7 @@ export function FeatureCard({
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-8 backdrop-blur-md transition-all duration-300 hover:border-emerald-500/30 hover:bg-white/10 hover:shadow-2xl hover:shadow-emerald-500/10",
+        "group relative overflow-hidden rounded-xl border border-white/5 bg-white/5 p-8 backdrop-blur-md transition-all duration-300 hover:border-emerald-500/30 hover:bg-white/10 hover:shadow-2xl hover:shadow-emerald-500/10",
         className,
       )}
     >

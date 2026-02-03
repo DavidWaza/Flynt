@@ -33,7 +33,7 @@ export default function UnlinkAccountModal({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-md overflow-hidden rounded-3xl bg-bg-secondary border border-border-primary shadow-2xl p-8"
+          className="relative w-full max-w-md overflow-hidden rounded-xl bg-bg-secondary border border-border-primary shadow-2xl p-8"
         >
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-xl font-bold text-text-primary uppercase tracking-tight">
@@ -60,9 +60,9 @@ export default function UnlinkAccountModal({
           </div>
 
           <div className="space-y-6 mb-10">
-            <div className="p-6 rounded-3xl bg-bg-elevated border border-border-primary flex flex-col items-center text-center">
+            <div className="p-6 rounded-xl bg-bg-elevated border border-border-primary flex flex-col items-center text-center">
               <div className="h-20 w-20 rounded-full bg-green-primary/10 flex items-center justify-center border border-green-primary/20 mb-4">
-                <div className="p-4 bg-green-primary rounded-2xl text-white shadow-lg shadow-green-primary/20">
+                <div className="p-4 bg-green-primary rounded-xl text-white shadow-lg shadow-green-primary/20">
                   <svg
                     className="w-8 h-8"
                     viewBox="0 0 24 24"
@@ -81,7 +81,7 @@ export default function UnlinkAccountModal({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 rounded-2xl bg-bg-elevated border border-border-primary">
+              <div className="p-4 rounded-xl bg-bg-elevated border border-border-primary">
                 <p className="text-[10px] font-black text-text-secondary uppercase tracking-wider mb-1">
                   Available Balance
                 </p>
@@ -89,7 +89,7 @@ export default function UnlinkAccountModal({
                   ₦{account.balance.toLocaleString()}
                 </p>
               </div>
-              <div className="p-4 rounded-2xl bg-bg-elevated border border-border-primary">
+              <div className="p-4 rounded-xl bg-bg-elevated border border-border-primary">
                 <p className="text-[10px] font-black text-text-secondary uppercase tracking-wider mb-1">
                   Status
                 </p>
@@ -108,7 +108,7 @@ export default function UnlinkAccountModal({
               variant="primary"
               fullWidth
               onClick={() => onUnlink(account.id)}
-              className="py-4 bg-error hover:bg-error/90 text-white rounded-2xl font-black uppercase tracking-wider shadow-lg shadow-error/20"
+              className="py-4 bg-error hover:bg-error/90 text-white rounded-xl font-black uppercase tracking-wider shadow-lg shadow-error/20"
             >
               Unlink Account
             </Button>
@@ -116,7 +116,7 @@ export default function UnlinkAccountModal({
               variant="secondary"
               fullWidth
               onClick={onClose}
-              className="py-4 rounded-2xl font-black uppercase tracking-wider"
+              className="py-4 rounded-xl font-black uppercase tracking-wider"
             >
               Keep Account
             </Button>

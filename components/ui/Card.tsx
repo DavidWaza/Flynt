@@ -14,7 +14,7 @@ export default function Card({
   padding = "md",
   variant = "default",
 }: CardProps) {
-  const baseStyles = "rounded-[2rem]";
+  const baseStyles = "rounded-xl";
 
   const variantStyles = {
     default: "bg-bg-card border-border-primary shadow-sm",

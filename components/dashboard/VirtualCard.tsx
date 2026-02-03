@@ -140,7 +140,7 @@ export default function VirtualCard({
             exit={{ opacity: 0, rotateY: -90, scale: 0.8 }}
             transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
             whileHover={{ scale: 1.02, y: -5 }}
-            className={`rounded-[2rem] ${scheme.cardBg} p-6 text-white shadow-2xl`}
+            className={`rounded-xl ${scheme.cardBg} p-6 text-white shadow-2xl`}
           >
             {/* Card Header */}
             <div className="mb-8 flex items-start justify-between">

@@ -78,7 +78,7 @@ export default function CreateDebtModal({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-md overflow-hidden rounded-3xl bg-bg-secondary border border-border-primary shadow-2xl p-6"
+          className="relative w-full max-w-md overflow-hidden rounded-xl bg-bg-secondary border border-border-primary shadow-2xl p-6"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-text-primary uppercase tracking-tight">

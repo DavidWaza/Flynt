@@ -74,7 +74,7 @@ export default function CategoryCard({
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -6, scale: 1.02 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className={`rounded-3xl ${styles.bg} border ${styles.border} shadow-sm p-5 cursor-pointer`}
+      className={`rounded-xl ${styles.bg} border ${styles.border} shadow-sm p-5 cursor-pointer`}
     >
       <div className="flex items-center justify-between mb-4">
         <motion.div

@@ -68,7 +68,7 @@ export default function Modal({
       aria-label={ariaLabel ?? title}
     >
       <div
-        className="w-full max-w-3xl rounded-3xl border border-border-primary bg-bg-card shadow-xl flex flex-col max-h-[90vh] overflow-hidden bg-[#F7F7F7]"
+        className="w-full max-w-3xl rounded-xl border border-border-primary bg-bg-card shadow-xl flex flex-col max-h-[90vh] overflow-hidden bg-[#F7F7F7]"
         onClick={(e) => e.stopPropagation()}
       >
         {title && (

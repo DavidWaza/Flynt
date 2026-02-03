@@ -60,7 +60,7 @@ export function Carousel({
   const prev = () => paginate(-1);
 
   return (
-    <div className={cn("relative overflow-hidden rounded-2xl", className)}>
+    <div className={cn("relative overflow-hidden rounded-xl", className)}>
       <div className="flex h-full items-center justify-center relative min-h-[400px]">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div

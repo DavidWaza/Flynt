@@ -59,7 +59,7 @@ export default function DashboardLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 rounded-3xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                     isActive
                       ? "bg-green-primary/10 text-green-primary"
                       : "text-text-secondary hover:bg-bg-elevated hover:text-text-primary"
@@ -195,7 +195,7 @@ export default function DashboardLayout({
                   handleLogout();
                 }
               }}
-              className="flex w-full items-center gap-3 rounded-3xl px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 focus:ring-offset-bg-secondary cursor-pointer"
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 focus:ring-offset-bg-secondary cursor-pointer"
               aria-label="Log out"
             >
               <svg

@@ -31,7 +31,7 @@ export default function AccountBreakdownModal({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-md overflow-hidden rounded-3xl bg-bg-secondary border border-border-primary shadow-2xl p-6"
+          className="relative w-full max-w-md overflow-hidden rounded-xl bg-bg-secondary border border-border-primary shadow-2xl p-6"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-text-primary uppercase tracking-tight">
@@ -61,7 +61,7 @@ export default function AccountBreakdownModal({
             {data.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 rounded-2xl bg-bg-card border border-border-primary"
+                className="flex items-center justify-between p-4 rounded-xl bg-bg-card border border-border-primary"
               >
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shadow-inner overflow-hidden border border-gray-100 dark:border-white/10 shrink-0">

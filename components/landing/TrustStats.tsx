@@ -84,7 +84,7 @@ export default function TrustStats() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden rounded-2xl border border-slate-950 dark:border-emerald-500/30 bg-slate-950 dark:bg-[#0E1233] p-12 text-center shadow-2xl"
+          className="relative overflow-hidden rounded-xl border border-slate-950 dark:border-emerald-500/30 bg-slate-950 dark:bg-[#0E1233] p-12 text-center shadow-2xl"
         >
           {/* Decorative pattern for the CTA box */}
           <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]" />

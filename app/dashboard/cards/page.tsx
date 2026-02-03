@@ -87,7 +87,7 @@ export default function CardsPage() {
         {cards.map((card) => (
           <div key={card.id} className="space-y-4">
             {/* Card Visual */}
-            <div className={`rounded-2xl bg-gradient-to-br ${card.color} p-6 text-white shadow-xl`}>
+            <div className={`rounded-xl bg-gradient-to-br ${card.color} p-6 text-white shadow-xl`}>
               <div className="mb-8 flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium">{card.name}</p>
@@ -242,7 +242,7 @@ export default function CardsPage() {
         {/* Create New Card Placeholder */}
         <button 
           onClick={() => setShowCreateModal(true)}
-          className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/10 p-12 text-center transition-colors hover:border-green-primary/50 hover:bg-green-primary/5"
+          className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-white/10 p-12 text-center transition-colors hover:border-green-primary/50 hover:bg-green-primary/5"
         >
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-primary/10 mb-4">
             <svg className="h-8 w-8 text-green-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">

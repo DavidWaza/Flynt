@@ -1,0 +1,30 @@
+{
+  "name": "flynt",
+  "version": "1.0.0",
+  "description": "A personal finance management application.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "jest"
+  },
+  "keywords": [
+    "finance",
+    "management",
+    "personal",
+    "dashboard"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "jest": "latest",
+    "ts-jest": "latest",
+    "typescript": "latest"
+  }
+}

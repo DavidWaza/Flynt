@@ -227,7 +227,7 @@ export default function OnboardPage() {
 
   const handleConnectConfirm = useCallback(() => {
     setConnectModalOpen(false);
-    router.push("/dashboard");
+    router.push("/onboarding/success");
   }, [router]);
 
   const canConnectAccount =
