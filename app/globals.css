@@ -2,180 +2,217 @@
 
 :root,
 .light {
-  /* Light Theme - Fintech Colors */
-  --bg-primary: #f5f5f5;
-  --bg-secondary: #ffffff;
-  --bg-card: #ffffff;
-  --bg-elevated: #fafafa;
+	/* Light Theme - Fintech Colors */
+	--bg-primary: #f5f5f5;
+	--bg-secondary: #ffffff;
+	--bg-card: #ffffff;
+	--bg-elevated: #fafafa;
 
-  /* Green Branding */
-  --green-primary: #00d9a3;
-  --green-secondary: #00b386;
-  --green-light: #4dffcd;
-  --green-dark: #008f6d;
-  --green-hover: #00b386;
-  --green-glow: rgba(0, 217, 163, 0.15);
+	/* Green Branding */
+	--green-primary: #00d9a3;
+	--green-secondary: #00b386;
+	--green-light: #4dffcd;
+	--green-dark: #008f6d;
+	--green-hover: #00b386;
+	--green-glow: rgba(0, 217, 163, 0.15);
 
-  /* Text Colors */
-  --text-primary: #1f2937;
-  --text-secondary: #4b5563;
-  --text-muted: #6b7280;
-  --text-inverse: #0a0e27;
+	/* Text Colors */
+	--text-primary: #1f2937;
+	--text-secondary: #4b5563;
+	--text-muted: #6b7280;
+	--text-inverse: #0a0e27;
 
-  /* Semantic Colors */
-  --success: #00d9a3;
-  --warning: #ffb020;
-  --error: #ff4757;
-  --info: #4c9aff;
+	/* Semantic Colors */
+	--success: #00d9a3;
+	--warning: #ffb020;
+	--error: #ff4757;
+	--info: #4c9aff;
 
-  /* Accent Colors */
-  --purple: #9d4edd;
-  --blue: #4c9aff;
-  --orange: #ffb020;
+	/* Accent Colors */
+	--purple: #9d4edd;
+	--blue: #4c9aff;
+	--orange: #ffb020;
 
-  /* Borders & Dividers */
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(0, 0, 0, 0.12);
-  --border-subtle: rgba(0, 0, 0, 0.04);
-  --bg-hover: rgba(0, 0, 0, 0.05);
+	/* Borders & Dividers */
+	--border-color: rgba(0, 0, 0, 0.08);
+	--border-hover: rgba(0, 0, 0, 0.12);
+	--border-subtle: rgba(0, 0, 0, 0.04);
+	--bg-hover: rgba(0, 0, 0, 0.05);
+
+	/* Header logo (light theme) */
+	--header-logo-url: url("/logo.png");
 }
 
 .dark {
-  /* Dark Theme - Fintech Colors */
-  --bg-primary: #0a0e27;
-  --bg-secondary: #141829;
-  --bg-card: #1a1f3a;
-  --bg-elevated: #252b4a;
+	/* Dark Theme - Fintech Colors */
+	--bg-primary: #0a0e27;
+	--bg-secondary: #141829;
+	--bg-card: #1a1f3a;
+	--bg-elevated: #252b4a;
 
-  /* Green Branding (same) */
-  --green-primary: #00d9a3;
-  --green-secondary: #00b386;
-  --green-light: #4dffcd;
-  --green-dark: #008f6d;
-  --green-hover: #00b386;
-  --green-glow: rgba(0, 217, 163, 0.15);
+	/* Green Branding (same) */
+	--green-primary: #00d9a3;
+	--green-secondary: #00b386;
+	--green-light: #4dffcd;
+	--green-dark: #008f6d;
+	--green-hover: #00b386;
+	--green-glow: rgba(0, 217, 163, 0.15);
 
-  /* Text Colors */
-  --text-primary: #ffffff;
-  --text-secondary: #e5e7eb;
-  --text-muted: #9ca3af;
-  --text-inverse: #0a0e27;
+	/* Text Colors */
+	--text-primary: #ffffff;
+	--text-secondary: #e5e7eb;
+	--text-muted: #9ca3af;
+	--text-inverse: #0a0e27;
 
-  /* Semantic Colors */
-  --success: #00d9a3;
-  --warning: #ffb020;
-  --error: #ff4757;
-  --info: #4c9aff;
+	/* Semantic Colors */
+	--success: #00d9a3;
+	--warning: #ffb020;
+	--error: #ff4757;
+	--info: #4c9aff;
 
-  /* Accent Colors */
-  --purple: #9d4edd;
-  --blue: #4c9aff;
-  --orange: #ffb020;
+	/* Accent Colors */
+	--purple: #9d4edd;
+	--blue: #4c9aff;
+	--orange: #ffb020;
 
-  /* Borders & Dividers */
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.12);
-  --border-subtle: rgba(255, 255, 255, 0.04);
-  --bg-hover: rgba(255, 255, 255, 0.05);
+	/* Borders & Dividers */
+	--border-color: rgba(255, 255, 255, 0.08);
+	--border-hover: rgba(255, 255, 255, 0.12);
+	--border-subtle: rgba(255, 255, 255, 0.04);
+	--bg-hover: rgba(255, 255, 255, 0.05);
+
+	/* Header logo (dark theme) */
+	--header-logo-url: url("/logo-white.png");
 }
 
 @theme inline {
-  --font-sans: var(--font-montserrat), system-ui, -apple-system, sans-serif;
+	--font-sans: var(--font-montserrat), system-ui, -apple-system, sans-serif;
 
-  /* Background Colors */
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-card: var(--bg-card);
-  --color-bg-elevated: var(--bg-elevated);
+	/* Background Colors */
+	--color-bg-primary: var(--bg-primary);
+	--color-bg-secondary: var(--bg-secondary);
+	--color-bg-card: var(--bg-card);
+	--color-bg-elevated: var(--bg-elevated);
 
-  /* Green Brand Colors */
-  --color-green-primary: var(--green-primary);
-  --color-green-secondary: var(--green-secondary);
-  --color-green-light: var(--green-light);
-  --color-green-dark: var(--green-dark);
-  --color-green-hover: var(--green-hover);
+	/* Green Brand Colors */
+	--color-green-primary: var(--green-primary);
+	--color-green-secondary: var(--green-secondary);
+	--color-green-light: var(--green-light);
+	--color-green-dark: var(--green-dark);
+	--color-green-hover: var(--green-hover);
 
-  /* Text Colors */
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
+	/* Text Colors */
+	--color-text-primary: var(--text-primary);
+	--color-text-secondary: var(--text-secondary);
+	--color-text-muted: var(--text-muted);
 
-  /* Semantic Colors */
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-error: var(--error);
-  --color-info: var(--info);
+	/* Semantic Colors */
+	--color-success: var(--success);
+	--color-warning: var(--warning);
+	--color-error: var(--error);
+	--color-info: var(--info);
 
-  /* Accent Colors */
-  --color-purple: var(--purple);
-  --color-blue: var(--blue);
-  --color-orange: var(--orange);
+	/* Accent Colors */
+	--color-purple: var(--purple);
+	--color-blue: var(--blue);
+	--color-orange: var(--orange);
 
-  /* Border & Hover States */
-  --color-border-primary: var(--border-color);
-  --color-border-hover: var(--border-hover);
-  --color-border-subtle: var(--border-subtle);
-  --color-bg-hover: var(--bg-hover);
+	/* Border & Hover States */
+	--color-border-primary: var(--border-color);
+	--color-border-hover: var(--border-hover);
+	--color-border-subtle: var(--border-subtle);
+	--color-bg-hover: var(--bg-hover);
 }
 
 * {
-  border-color: var(--border-color);
+	border-color: var(--border-color);
 }
 
 /* Utility aliases that map to theme variables used throughout the codebase */
-.text-text-primary { color: var(--text-primary); }
-.text-text-secondary { color: var(--text-secondary); }
-.text-text-muted { color: var(--text-muted); }
+.text-text-primary {
+	color: var(--text-primary);
+}
+.text-text-secondary {
+	color: var(--text-secondary);
+}
+.text-text-muted {
+	color: var(--text-muted);
+}
 
-.bg-bg-primary { background-color: var(--bg-primary); }
-.bg-bg-secondary { background-color: var(--bg-secondary); }
-.bg-bg-card { background-color: var(--bg-card); }
-.bg-bg-elevated { background-color: var(--bg-elevated); }
+.bg-bg-primary {
+	background-color: var(--bg-primary);
+}
+.bg-bg-secondary {
+	background-color: var(--bg-secondary);
+}
+.bg-bg-card {
+	background-color: var(--bg-card);
+}
+.bg-bg-elevated {
+	background-color: var(--bg-elevated);
+}
 
-.border-border-primary { border-color: var(--border-color); }
-.border-border-subtle { border-color: var(--border-subtle); }
-.border-border-hover { border-color: var(--border-hover); }
+.border-border-primary {
+	border-color: var(--border-color);
+}
+.border-border-subtle {
+	border-color: var(--border-subtle);
+}
+.border-border-hover {
+	border-color: var(--border-hover);
+}
 
-.bg-green-primary { background-color: var(--green-primary); }
-.bg-green-secondary { background-color: var(--green-secondary); }
-.text-green-primary { color: var(--green-primary); }
-.text-green-secondary { color: var(--green-secondary); }
+.bg-green-primary {
+	background-color: var(--green-primary);
+}
+.bg-green-secondary {
+	background-color: var(--green-secondary);
+}
+.text-green-primary {
+	color: var(--green-primary);
+}
+.text-green-secondary {
+	color: var(--green-secondary);
+}
 
-.bg-hover { background-color: var(--bg-hover); }
+.bg-hover {
+	background-color: var(--bg-hover);
+}
 
 /* Accent/glow helpers */
-.glow-green { box-shadow: 0 8px 28px rgba(15,157,104,0.08); }
-
+.glow-green {
+	box-shadow: 0 8px 28px rgba(15, 157, 104, 0.08);
+}
 
 body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-feature-settings: "cv11", "ss01";
-  font-variant-numeric: tabular-nums;
+	background: var(--bg-primary);
+	color: var(--text-primary);
+	font-feature-settings: "cv11", "ss01";
+	font-variant-numeric: tabular-nums;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+	width: 8px;
+	height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+	background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-elevated);
-  border-radius: 4px;
+	background: var(--bg-elevated);
+	border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.2);
 }
 
 /* Smooth transitions */
 * {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+	transition-property: background-color, border-color, color, fill, stroke;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 150ms;
 }
