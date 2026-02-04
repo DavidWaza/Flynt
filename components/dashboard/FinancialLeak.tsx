@@ -59,13 +59,13 @@ export default function FinancialLeaksSystem() {
   const totalLeakage = leaks.reduce((acc, curr) => acc + curr.amount, 0);
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0D1131] shadow-2xl">
+    <div className="w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-bg-secondary dark:bg-[#0D1131] shadow-2xl">
       {/* Diagnostic Header */}
-      <div className="bg-slate-950 p-6 text-white">
+      <div className="bg-bg-secondary p-6 text-white">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Droplets className="w-5 h-5 text-blue-400 animate-pulse" />
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em]">Leak Detection System</h3>
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-text-secondary">Leak Detection System</h3>
           </div>
           <div className="px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/10 text-[9px] font-mono text-blue-400 uppercase">
             Status: Active
@@ -73,11 +73,11 @@ export default function FinancialLeaksSystem() {
         </div>
         
         <div className="space-y-1">
-          <div className="text-3xl font-mono font-bold text-white">
+          <div className="text-3xl  font-bold text-text-secondary dark:text-white tracking-tight">
             ₦{totalLeakage.toLocaleString()}
-            <span className="text-xs text-slate-500 ml-2 font-normal uppercase tracking-tighter">/ monthly leakage</span>
+            <span className="text-xs text-text-secondary ml-2 font-normal uppercase tracking-tighter">/ monthly leakage</span>
           </div>
-          <p className="text-[10px] text-slate-400 font-mono italic">
+          <p className="text-[10px] text-text-secondary  font-mono italic">
             {leaks.length > 0 ? `> ${leaks.length} vulnerabilities identified` : "> All leaks successfully plugged"}
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function FinancialLeaksSystem() {
                   leak.severity === 'moderate' ? 'bg-amber-500' : 'bg-slate-400'
                 }`} />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">
+                  <h4 className="text-sm font-bold text-text-secondary dark:text-white leading-none mb-1">
                     {leak.source}
                   </h4>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mb-2">
