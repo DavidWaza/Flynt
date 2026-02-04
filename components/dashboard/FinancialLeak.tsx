@@ -59,7 +59,7 @@ export default function FinancialLeaksSystem() {
   const totalLeakage = leaks.reduce((acc, curr) => acc + curr.amount, 0);
 
   return (
-    <div className="w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-bg-secondary dark:bg-[#0D1131] shadow-2xl">
+    <div className="w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-bg-secondary dark:bg-[#0D1131]">
       {/* Diagnostic Header */}
       <div className="bg-bg-secondary p-6 text-white">
         <div className="flex items-center justify-between mb-4">

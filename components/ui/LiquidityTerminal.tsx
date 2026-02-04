@@ -50,7 +50,7 @@ export default function LiquidityTerminal({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative h-96 overflow-hidden rounded-2xl border border-slate-100 dark:border-white/10 dark:bg-[#0D1131] bg-bg-secondary p-8 shadow-sm"
+      className="relative h-96 overflow-hidden rounded-2xl border border-slate-100 dark:border-white/10 dark:bg-[#0D1131] bg-bg-secondary p-8"
     >
       {/* Privacy Mask Background Overlay */}
       <AnimatePresence>
