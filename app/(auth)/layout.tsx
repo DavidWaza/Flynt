@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "@/public/logo.png";
 import logoWhite from "@/public/logo-white.png";
 import { BackgroundGrid } from "@/components/ui/background-grid";
+import { HeaderLogo } from "@/components/HeaderLogo";
 
 export default function AuthLayout({
   children,
@@ -19,24 +20,7 @@ export default function AuthLayout({
           className="flex items-center gap-2 uppercase font-extrabold tracking-wider text-text-primary transition-colors hover:text-green-primary focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded-lg px-2 py-1"
           aria-label="Flynt home"
         >
-          <div className="relative w-[30%] mx-auto h-auto min-w-[120px]">
-            <Image
-              alt="logo"
-              src={logo}
-              width={120}
-              height={40}
-              className="w-full h-auto object-contain object-center block dark:hidden"
-              priority
-            />
-            <Image
-              alt="logo"
-              src={logoWhite}
-              width={120}
-              height={40}
-              className="w-full h-auto object-contain object-center hidden dark:block"
-              priority
-            />
-          </div>
+          <HeaderLogo width={120} height={40} />
         </Link>
         <div className="absolute right-4 top-8">
           <ThemeToggle />

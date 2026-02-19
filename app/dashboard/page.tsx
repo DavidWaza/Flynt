@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import InvestmentInsightsModal from "@/components/InvestmentInsightsModal";
-import { StatCard, Card, Input, Button } from "@/components/ui";
+import { Card, Input, Button } from "@/components/ui";
+import AddCardModal, { type CardDetails } from "@/components/modal/AddCardModal";
+import useSync from "../(auth)/flynt/hooks/useSync";
+import SyncAnimation from "../(auth)/flynt/components/SyncAnimation";
 import {
   CategoryCard,
   TransactionItem,
@@ -17,11 +19,16 @@ import {
   type LinkedAccount,
 } from "@/components/dashboard";
 import { useDebts } from "@/contexts/DebtContext";
+import LiquidityTerminal from "@/components/ui/LiquidityTerminal";
+import FlyntInsights from "@/components/dashboard/Insights";
+import FinancialLeaksSystem from "@/components/dashboard/FinancialLeak";
 
 export default function DashboardPage() {
   const { debts, deleteDebt } = useDebts();
+  const { startSynchronization, isSyncing } = useSync();
   const [showInvestmentModal, setShowInvestmentModal] = useState(false);
   const [showDebtModal, setShowDebtModal] = useState(false);
+  const [showConnectCardModal, setShowConnectCardModal] = useState(false);
   const [breakdownModal, setBreakdownModal] = useState<{
     isOpen: boolean;
     title: string;
@@ -157,28 +164,10 @@ export default function DashboardPage() {
     },
   ];
 
-  const inflowBreakdown = [
-    { name: "Zenith Bank", icon: "/banks/zenith.svg", amount: 250000 },
-    { name: "GTBank", icon: "/banks/gtbank.jpeg", amount: 150000 },
-    { name: "Access Bank", icon: "/banks/access.svg", amount: 50000 },
-  ];
-
-  const outflowBreakdown = [
-    { name: "Zenith Bank", icon: "/banks/zenith.svg", amount: 180000 },
-    { name: "GTBank", icon: "/banks/gtbank.jpeg", amount: 95000 },
-    { name: "Access Bank", icon: "/banks/access.svg", amount: 30000 },
-  ];
-
-  const surplusBreakdown = [
-    { name: "Zenith Bank", icon: "/banks/zenith.svg", amount: 70000 },
-    { name: "GTBank", icon: "/banks/gtbank.jpeg", amount: 55000 },
-    { name: "Access Bank", icon: "/banks/access.svg", amount: 20000 },
-  ];
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto p-6 pt-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between ">
         <div className="flex flex-wrap items-center gap-4 mb-1">
           {/* {connectedAccounts.map((account, index) => (
             <div
@@ -207,7 +196,10 @@ export default function DashboardPage() {
             </div>
           ))} */}
 
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-primary/10 border-2 border-dashed border-gray-200 dark:border-white/10 text-text-secondary hover:border-green-primary hover:text-green-primary transition-all group">
+          <button
+            onClick={() => setShowConnectCardModal(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-primary/10 border-2 border-dashed border-gray-200 dark:border-white/10 text-text-secondary hover:border-green-primary hover:text-green-primary transition-all group"
+          >
             <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-green-primary/10 transition-colors">
               <svg
                 className="h-4 w-4"
@@ -251,44 +243,18 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard
-          title="Total Inflow"
-          value={450000}
-          trend={{ value: "+5.1% vs last month", isPositive: true }}
-          onClick={() =>
-            setBreakdownModal({
-              isOpen: true,
-              title: "Total Inflow Breakdown",
-              data: inflowBreakdown,
-            })
-          }
+      <div className="grid gap-4 md:grid-cols-2">
+        {/* Balance enquire */}
+        <LiquidityTerminal
+          totalBalance={15750400} // This would come from your backend API
+          connectedBanks={[
+            { name: "Zenith Bank", amount: 8000000, color: "bg-red-600" },
+            { name: "Access Bank", amount: 4750400, color: "bg-orange-500" },
+            { name: "UBA", amount: 3000000, color: "bg-red-800" },
+          ]}
         />
-        <StatCard
-          title="Total Outflow"
-          value={305000}
-          trend={{ value: "+2% vs last month", isPositive: true }}
-          onClick={() =>
-            setBreakdownModal({
-              isOpen: true,
-              title: "Total Outflow Breakdown",
-              data: outflowBreakdown,
-            })
-          }
-        />
-        <StatCard
-          title="Monthly Surplus"
-          value={145000}
-          subtitle="Safe to invest or save"
-          variant="success"
-          onClick={() =>
-            setBreakdownModal({
-              isOpen: true,
-              title: "Monthly Surplus Breakdown",
-              data: surplusBreakdown,
-            })
-          }
-        />
+        {/* Analysis */}
+        <FlyntInsights />
       </div>
 
       {/* Main Content Grid */}
@@ -338,9 +304,9 @@ export default function DashboardPage() {
 
           {/* Spending Breakdown */}
           <div>
-            <h2 className="text-lg font-semibold text-text-primary mb-4">
+            {/* <h2 className="text-lg font-semibold text-text-primary mb-4">
               Spending Breakdown
-            </h2>
+            </h2> */}
 
             <div className="grid gap-4 md:grid-cols-3">
               <CategoryCard
@@ -508,64 +474,6 @@ export default function DashboardPage() {
           /> */}
 
           {/* AI Insights */}
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-green-primary to-green-secondary p-6 text-white shadow-lg">
-            {/* Doodle Background Pattern */}
-            <div
-              className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay"
-              style={{
-                backgroundImage: "url('/doodle.png')",
-                backgroundSize: "200px",
-                backgroundRepeat: "repeat",
-              }}
-            />
-
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-              </div>
-
-              <h3 className="text-lg font-bold mb-2">AI Insights</h3>
-              <h2 className="text-2xl font-bold mb-3">
-                You can save
-                <br />
-                ₦45,000 this month
-              </h2>
-              <p className="text-sm opacity-90 mb-6">
-                Based on your spending patterns, redirecting some discretionary
-                spending could boost your savings significantly.
-              </p>
-
-              <Button
-                variant="secondary"
-                fullWidth
-                onClick={() => setShowInvestmentModal(true)}
-                className="mb-4  text-green-dark hover:bg-green-light hover:text-bg-primary"
-              >
-                View Insights →
-              </Button>
-
-              {/* Pagination dots */}
-              <div className="flex items-center justify-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-white"></div>
-                <div className="h-2 w-6 rounded-full bg-white/40"></div>
-                <div className="h-2 w-2 rounded-full bg-white/40"></div>
-              </div>
-            </div>
-          </div>
 
           {/* Financial Health */}
           <Card>
@@ -593,6 +501,9 @@ export default function DashboardPage() {
               This credit score is gotten from the Nigerian Credit Bureau
             </p>
           </Card>
+
+          {/* Financial leakages */}
+          <FinancialLeaksSystem />
 
           {/* Linked Accounts */}
           <LinkedAccountsCard
@@ -634,6 +545,39 @@ export default function DashboardPage() {
         account={selectedAccountForUnlink}
         onUnlink={handleUnlink}
       />
+
+      {/* Connect Card Modal */}
+      <AddCardModal
+        open={showConnectCardModal}
+        onClose={() => setShowConnectCardModal(false)}
+        onConfirm={(cardDetails: CardDetails) => {
+          // Add new bank account to the list
+          const newAccount: LinkedAccount = {
+            id: String(linkedAccounts.length + 1),
+            name: cardDetails.cardholderName,
+            icon: "/banks/gtbank.jpeg",
+            lastFour: cardDetails.cardNumber.slice(-4),
+            balance: 0,
+          };
+          setLinkedAccounts([...linkedAccounts, newAccount]);
+          // Start secure synchronization animation / handshake
+          try {
+            startSynchronization();
+          } catch (err) {
+            // ignore errors here; useSync handles errors internally
+            console.error("Failed to start synchronization", err);
+          }
+        }}
+      />
+      {/* Sync animation overlay when performing handshake */}
+      {isSyncing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="max-w-md w-full">
+            <SyncAnimation />
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

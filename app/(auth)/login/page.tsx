@@ -143,12 +143,6 @@ export default function LoginPage() {
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="mb-6 flex flex-col items-center text-center">
-        {/* <div
-          className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-primary/15 text-green-primary"
-          aria-hidden
-        >
-          <LogInIcon />
-        </div> */}
         <h1 className="text-xl font-medium text-text-primary">
           Welcome back to FLYNT
         </h1>

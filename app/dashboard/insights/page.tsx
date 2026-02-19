@@ -1,295 +1,309 @@
+"use client";
+
+import { motion } from "framer-motion";
+import {
+  BrainCircuit,
+  Sparkles,
+  TrendingUp,
+  Zap,
+  ShieldCheck,
+  ArrowUpRight,
+  Clock,
+  MoreHorizontal,
+  X,
+} from "lucide-react";
+
+// Mock Data Extensions
+const SUMMARY_STATS = [
+  {
+    label: "Active Nodes",
+    value: "05",
+    sub: "Unread",
+    icon: BrainCircuit,
+    color: "text-blue-500",
+  },
+  {
+    label: "Projected Delta",
+    value: "₦16k",
+    sub: "Potential",
+    icon: Zap,
+    color: "text-emerald-500",
+  },
+  {
+    label: "Model Integrity",
+    value: "86%",
+    sub: "Accuracy",
+    icon: ShieldCheck,
+    color: "text-purple-500",
+  },
+  {
+    label: "Fiscal Pulse",
+    value: "92/100",
+    sub: "Health",
+    icon: Sparkles,
+    color: "text-orange-500",
+  },
+];
+
 export default function InsightsPage() {
-  const insights = [
-    {
-      id: 1,
-      type: "warning",
-      category: "prediction",
-      title: "Budget Alert",
-      message: "At current rate, you'll exceed your food budget in 4 days",
-      impact: "high",
-      action: "Consider reducing dining out expenses",
-      date: "2026-01-28",
-    },
-    {
-      id: 2,
-      type: "info",
-      category: "subscription",
-      title: "Subscriptions Detected",
-      message: "3 subscriptions found totaling ₦2,050/month",
-      impact: "medium",
-      action: "Review and cancel unused subscriptions",
-      date: "2026-01-27",
-    },
-    {
-      id: 3,
-      type: "success",
-      category: "spending",
-      title: "Great Progress!",
-      message: "You're 15% under budget this month",
-      impact: "positive",
-      action: "Keep up the great work",
-      date: "2026-01-26",
-    },
-    {
-      id: 4,
-      type: "info",
-      category: "prediction",
-      title: "Recurring Pattern Detected",
-      message: "You spend an average of ₦12,000 on food every week",
-      impact: "medium",
-      action: "Consider meal prepping to save ₦4,000/week",
-      date: "2026-01-25",
-    },
-    {
-      id: 5,
-      type: "warning",
-      category: "spending",
-      title: "High Transport Costs",
-      message: "Transport spending is 40% higher than similar users",
-      impact: "medium",
-      action: "Explore carpooling or public transport options",
-      date: "2026-01-24",
-    },
-  ];
-
-  const predictions = [
-    {
-      category: "Food",
-      currentSpent: 12450,
-      predicted: 18500,
-      budget: 20000,
-      trend: "up",
-      confidence: 85,
-    },
-    {
-      category: "Transport",
-      currentSpent: 3500,
-      predicted: 5200,
-      budget: 8000,
-      trend: "stable",
-      confidence: 78,
-    },
-    {
-      category: "Bills",
-      currentSpent: 16500,
-      predicted: 27000,
-      budget: 30000,
-      trend: "stable",
-      confidence: 95,
-    },
-  ];
-
-  const getTypeColor = (type: string) => {
-    const colors = {
-      warning: { bg: "bg-warning/5", border: "border-warning/20", icon: "text-warning" },
-      info: { bg: "bg-info/5", border: "border-info/20", icon: "text-info" },
-      success: { bg: "bg-success/5", border: "border-success/20", icon: "text-success" },
-    };
-    return colors[type as keyof typeof colors] || colors.info;
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Financial Insights</h1>
-        <p className="text-sm text-text-secondary mt-1">AI-powered predictions and recommendations</p>
-      </div>
-
-      {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-xl bg-bg-card border border-white/5 p-5">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-secondary">Active Insights</span>
-            <svg className="h-5 w-5 text-green-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+    <div className="max-w-7xl mx-auto space-y-10 p-6 pb-24 dark:text-white">
+      {/* Dynamic Intelligence Header */}
+      <header className="flex flex-col md:flex-row justify-between gap-6 items-start">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              Live Prediction Engine
+            </span>
           </div>
-          <div className="text-2xl font-bold text-text-primary">{insights.length}</div>
-          <p className="text-xs text-text-muted mt-1">Unread notifications</p>
+          <h1 className="text-4xl font-black tracking-tight text-text-secondary dark:text-white">
+            Financial Intelligence
+          </h1>
+          <p className="text-slate-500 text-sm">
+            Real-time heuristics and predictive spending trajectories.
+          </p>
         </div>
 
-        <div className="rounded-xl bg-bg-card border border-white/5 p-5">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-secondary">Potential Savings</span>
-            <svg className="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div className="text-2xl font-bold text-text-primary">₦16,000</div>
-          <p className="text-xs text-success mt-1">Per month</p>
-        </div>
-
-        <div className="rounded-xl bg-bg-card border border-white/5 p-5">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-secondary">Prediction Accuracy</span>
-            <svg className="h-5 w-5 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <div className="text-2xl font-bold text-text-primary">86%</div>
-          <p className="text-xs text-text-muted mt-1">Average confidence</p>
-        </div>
-
-        <div className="rounded-xl bg-bg-card border border-white/5 p-5">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-secondary">Budget Health</span>
-            <svg className="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div className="text-2xl font-bold text-text-primary">Good</div>
-          <p className="text-xs text-success mt-1">On track</p>
-        </div>
-      </div>
-
-      {/* Spending Predictions */}
-      <div className="rounded-xl bg-bg-card border border-white/5 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-lg font-semibold text-text-primary">Spending Predictions</h2>
-            <p className="text-sm text-text-secondary mt-1">Forecasted spending for end of month</p>
-          </div>
-          <span className="rounded-full bg-green-primary/10 px-3 py-1.5 text-xs font-semibold text-green-primary">
-            AI Powered
-          </span>
-        </div>
-
-        <div className="space-y-6">
-          {predictions.map((pred, i) => (
-            <div key={i} className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-text-primary">{pred.category}</h3>
-                  <p className="text-xs text-text-muted mt-0.5">
-                    {pred.confidence}% confidence • {pred.trend === "up" ? "📈" : "📊"} {pred.trend}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-lg font-bold text-text-primary">₦{pred.predicted.toLocaleString()}</p>
-                  <p className="text-xs text-text-secondary">of ₦{pred.budget.toLocaleString()}</p>
-                </div>
-              </div>
-
-              <div className="relative">
-                <div className="h-2 overflow-hidden rounded-full bg-bg-elevated">
-                  <div 
-                    className="h-full rounded-full bg-text-muted" 
-                    style={{ width: `${(pred.currentSpent / pred.budget) * 100}%` }}
-                  ></div>
-                </div>
-                <div 
-                  className="absolute top-0 h-2 w-0.5 bg-green-primary" 
-                  style={{ left: `${(pred.predicted / pred.budget) * 100}%` }}
-                >
-                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs text-green-primary">
-                    Predicted
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-text-secondary">Current: ₦{pred.currentSpent.toLocaleString()}</span>
-                <span className={pred.predicted > pred.budget ? "text-error" : "text-success"}>
-                  {pred.predicted > pred.budget ? "⚠️ May exceed" : "✓ Within budget"}
-                </span>
-              </div>
-            </div>
+        <div className="flex items-center gap-2 bg-bg-secondary dark:bg-white/5 p-1 rounded-2xl border border-slate-200 dark:border-white/10">
+          {["Overview", "Forecasts", "Strategy"].map((tab) => (
+            <button
+              key={tab}
+              className={`px-4 py-2 rounded-xl text-xs text-text-primary font-bold transition-all ${tab === "Overview" ? "bg-bg-primary dark:bg-white/10 shadow-sm" : "text-text-secondary hover:text-text-primary dark:hover:text-white hover:bg-bg-elevated dark:hover:bg-white/5"}`}
+            >
+              {tab}
+            </button>
           ))}
         </div>
+      </header>
+
+      {/* Hero Stats Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {SUMMARY_STATS.map((stat, i) => (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            key={stat.label}
+            className="bg-bg-secondary dark:bg-[#0D1131] border border-slate-200 dark:border-white/5 p-5 rounded-xl relative overflow-hidden group"
+          >
+            <stat.icon size={18} className={`${stat.color} mb-3`} />
+            <p className="text-[10px] font-bold uppercase tracking-widest text-text-secondary dark:text-slate-400">
+              {stat.label}
+            </p>
+            <p className="text-2xl font-mono font-bold mt-1 text-text-secondary ">{stat.value}</p>
+            <span className="text-[10px] font-medium text-text-secondary">
+              {stat.sub}
+            </span>
+          </motion.div>
+        ))}
       </div>
 
-      {/* Insights Feed */}
-      <div className="rounded-xl bg-bg-card border border-white/5 p-6">
-        <h2 className="text-lg font-semibold text-text-primary mb-6">All Insights</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column: Predictions */}
+        <div className="lg:col-span-2 space-y-8">
+          <section className="bg-bg-secondary dark:bg-[#0D1131] border border-slate-200 dark:border-white/5 rounded-[2.5rem] p-8">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-xl font-bold flex items-center gap-2 text-text-secondary">
+                <TrendingUp className="text-text-secondary" /> Spending
+                Trajectories
+              </h2>
+              <div className="text-[10px] font-bold bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full uppercase tracking-widest">
+                EOM Projection
+              </div>
+            </div>
 
-        <div className="space-y-4">
-          {insights.map((insight) => {
-            const colors = getTypeColor(insight.type);
-            return (
-              <div key={insight.id} className={`flex gap-4 rounded-lg border ${colors.border} ${colors.bg} p-4`}>
-                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${colors.bg}`}>
-                  {insight.type === "warning" && (
-                    <svg className={`h-6 w-6 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                  )}
-                  {insight.type === "info" && (
-                    <svg className={`h-6 w-6 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  )}
-                  {insight.type === "success" && (
-                    <svg className={`h-6 w-6 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  )}
+            <div className="space-y-10">
+              <PredictionItem
+                category="Food & Dining"
+                current={12450}
+                predicted={18500}
+                budget={20000}
+                confidence={85}
+                status="on-track"
+              />
+              <PredictionItem
+                category="Logistics"
+                current={8500}
+                predicted={11200}
+                budget={8000}
+                confidence={72}
+                status="warning"
+              />
+            </div>
+          </section>
+
+          {/* Neural Feed (Insights) */}
+          <div className="space-y-4">
+            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-500 ml-4">
+              System Alerts
+            </h2>
+            <InsightCard
+              type="warning"
+              title="Budget Exhaustion Imminent"
+              message="At current velocity, your Food budget will reach 100% in 4.2 days."
+              cta="Audit Expenses"
+            />
+            <InsightCard
+              type="info"
+              title="Subscription Audit"
+              message="Detected 3 recurring charges. Potential ghost-subscription detected: 'Netflix Premium'."
+              cta="Resolve"
+            />
+          </div>
+        </div>
+
+        {/* Right Column: AI Strategy */}
+        <aside className="space-y-6 text-text-secondary">
+          <div className="bg-bg-secondary dark:bg-[#0D1131] rounded-[2.5rem] p-8 text-white relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-10 w-10 rounded-2xl bg-emerald-500 flex items-center justify-center">
+                  <Sparkles size={20} className="text-white" />
                 </div>
-
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="font-semibold text-text-primary">{insight.title}</h3>
-                      <p className="text-xs text-text-muted mt-0.5">
-                        {new Date(insight.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })} • {insight.category}
-                      </p>
-                    </div>
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                      insight.impact === "high" ? "bg-error/10 text-error" :
-                      insight.impact === "medium" ? "bg-warning/10 text-warning" :
-                      "bg-success/10 text-success"
-                    }`}>
-                      {insight.impact}
-                    </span>
-                  </div>
-
-                  <p className="text-sm text-text-secondary mb-3">{insight.message}</p>
-
-                  <div className="flex items-center gap-3">
-                    <button className="rounded-lg bg-bg-elevated px-3 py-1.5 text-xs font-medium text-text-primary transition-colors hover:bg-bg-elevated/80">
-                      {insight.action}
-                    </button>
-                    <button className="text-xs font-medium text-text-muted hover:text-text-secondary">
-                      Dismiss
-                    </button>
-                  </div>
+                <div>
+                  <h3 className="font-bold text-text-secondary">Flynt Strategy</h3>
+                  <p className="text-[10px] text-emerald-400 font-bold uppercase">
+                    Optimized for Feb 2026
+                  </p>
                 </div>
               </div>
-            );
-          })}
+
+              <p className="text-sm text-slate-400 leading-relaxed mb-6">
+                Your savings velocity is currently **8% above benchmark**.
+                Clearing two minor debt notes could unlock a **₦12,500** monthly
+                cashflow surplus.
+              </p>
+
+              <div className="space-y-3">
+                <StrategyTask text="Switch to weekly meal prep" saving="₦12k" />
+                <StrategyTask text="Review transport routing" saving="₦4k" />
+              </div>
+            </div>
+            <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-emerald-500/10 blur-[80px]" />
+          </div>
+
+          <div className="p-8 rounded-[2.5rem] bg-bg-secondary dark:bg-[#0D1131] border border-slate-200 dark:border-white/5">
+            <h4 className="font-bold mb-4">Historical Accuracy</h4>
+            {/* Simple sparkline visual representation */}
+            <div className="flex items-end gap-1 h-12 mb-2">
+              {[40, 70, 45, 90, 65, 80, 86].map((h, i) => (
+                <div
+                  key={i}
+                  className="flex-1 bg-emerald-500/20 rounded-t-sm"
+                  style={{ height: `${h}%` }}
+                />
+              ))}
+            </div>
+            <p className="text-[10px] font-bold text-slate-500 uppercase">
+              System Reliability: 99.4% Uptime
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function PredictionItem({
+  category,
+  current,
+  predicted,
+  budget,
+  confidence,
+  status,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+}: any) {
+  const isOver = predicted > budget;
+  return (
+    <div className="group">
+      <div className="flex justify-between items-end mb-4 text-text-secondary">
+        <div>
+          <h4 className="font-bold text-lg text-text-secondary">{category}</h4>
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase text-slate-400">
+            <Clock size={12} /> {confidence}% Prediction Confidence
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-xl font-mono font-bold">
+            ₦{predicted.toLocaleString()}
+          </p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            Limit: ₦{budget.toLocaleString()}
+          </p>
         </div>
       </div>
 
-      {/* AI Recommendations */}
-      <div className="rounded-xl bg-gradient-to-br from-green-dark to-green-secondary p-6 text-white">
-        <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20">
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2">Personalized Tip</h3>
-            <p className="text-sm opacity-90 mb-4">
-              Based on your spending patterns, you could save ₦16,000/month by:
-            </p>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-center gap-2">
-                <span className="text-green-light">✓</span>
-                <span>Cooking at home 3 more times per week (saves ₦12,000)</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-light">✓</span>
-                <span>Canceling unused Netflix subscription (saves ₦3,000)</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-green-light">✓</span>
-                <span>Using public transport twice a week (saves ₦1,000)</span>
-              </li>
-            </ul>
-          </div>
-        </div>
+      <div className="relative h-3 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden mb-2">
+        <div
+          className="h-full bg-bg-primary dark:bg-white/20"
+          style={{ width: `${(current / budget) * 100}%` }}
+        />
+        <div
+          className={`absolute top-0 h-full border-l-2 border-dashed border-white dark:border-slate-900 ${isOver ? "bg-red-500" : "bg-emerald-500"}`}
+          style={{
+            left: `${(current / budget) * 100}%`,
+            width: `${((predicted - current) / budget) * 100}%`,
+          }}
+        />
       </div>
+      <div className="flex justify-between text-[10px] font-bold uppercase">
+        <span className="text-slate-400">
+          Consumed: ₦{current.toLocaleString()}
+        </span>
+        <span className={isOver ? "text-red-500" : "text-emerald-500"}>
+          {isOver ? "Critical Breach Projected" : "Within Threshold"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+interface InsightCardProps {
+  type: "warning" | "info";
+  title: string;
+  message: string;
+  cta: string;
+}
+
+function InsightCard({ type, title, message, cta }: InsightCardProps) {
+  return (
+    <div
+      className={`p-6 rounded-3xl text-text-secondary border ${type === "warning" ? "bg-red-500/5 border-red-500/20" : "bg-blue-500/5 border-blue-500/20"} flex gap-4 items-start`}
+    >
+      <div
+        className={`p-2 rounded-xl ${type === "warning" ? "bg-red-500/20 text-red-500" : "bg-blue-500/20 text-blue-500"}`}
+      >
+        {type === "warning" ? <Zap size={18} /> : <BrainCircuit size={18} />}
+      </div>
+      <div className="flex-1">
+        <div className="flex justify-between items-start">
+          <h4 className="font-bold text-sm mb-1">{title}</h4>
+          <button className="text-slate-400 hover:text-slate-900">
+            <X size={14} />
+          </button>
+        </div>
+        <p className="text-xs text-text-secondary leading-relaxed mb-4">{message}</p>
+        <button className="flex text-text-secondary items-center gap-1 text-[10px] font-bold uppercase tracking-widest  dark:text-white hover:gap-2 transition-all">
+          {cta} <ArrowUpRight size={12} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+interface StrategyTaskProps {
+  text: string;
+  saving: string;
+}
+
+function StrategyTask({ text, saving }: StrategyTaskProps) {
+  return (
+    <div className="flex items-center text-text-secondary justify-between p-3 rounded-xl bg-white/5 border border-white/5 group hover:bg-white/10 transition-all cursor-pointer">
+      <span className="text-xs font-medium">{text}</span>
+      <span className="text-[10px] font-mono font-bold text-emerald-400">
+        +{saving}
+      </span>
     </div>
   );
 }
