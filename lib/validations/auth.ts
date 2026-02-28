@@ -85,6 +85,18 @@ export const resetPasswordSchema = yup.object({
 
 export type ResetPasswordFormValues = yup.InferType<typeof resetPasswordSchema>;
 
+/** Change password: currentPassword, newPassword, confirmPassword */
+export const changePasswordSchema = yup.object({
+  currentPassword: yup.string().required("Current password is required"),
+  newPassword: newPasswordField,
+  confirmPassword: yup
+    .string()
+    .required("Please confirm your password")
+    .oneOf([yup.ref("newPassword")], "Passwords must match"),
+});
+
+export type ChangePasswordFormValues = yup.InferType<typeof changePasswordSchema>;
+
 /** Validate only the phone field (full international number e.g. +2348012345678). */
 export const validatePhone = (fullPhone: string): string | null => {
   try {

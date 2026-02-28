@@ -22,6 +22,8 @@ import type {
   ForgotPasswordResponseData,
   ResetPasswordPayload,
   ResetPasswordResponseData,
+  ChangePasswordPayload,
+  ChangePasswordResponseData,
 } from "./types";
 
 /** Example: GET /example - add response type in types.ts when you have a real endpoint */
@@ -104,6 +106,16 @@ export async function resetPasswordRequest(
   body: ResetPasswordPayload
 ): Promise<TypeApiResponse<ResetPasswordResponseData>> {
   return customFetch<TypeApiResponse<ResetPasswordResponseData>>("/auth/reset-password", {
+    method: "post",
+    body,
+  });
+}
+
+/** POST /auth/change-password */
+export async function changePasswordRequest(
+  body: ChangePasswordPayload
+): Promise<TypeApiResponse<ChangePasswordResponseData>> {
+  return customFetch<TypeApiResponse<ChangePasswordResponseData>>("/auth/change-password", {
     method: "post",
     body,
   });

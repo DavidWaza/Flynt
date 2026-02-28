@@ -86,6 +86,16 @@ export interface ResetPasswordResponseData {
   message: string
 }
 
+export interface ChangePasswordPayload {
+  currentPassword: string
+  newPassword: string
+}
+
+export interface ChangePasswordResponseData {
+  success: boolean
+  message: string
+}
+
 export interface CustomFetchConfig {
   method?: string
   headers?: Record<string, string>
