@@ -53,3 +53,15 @@ export const clearRegisterData = (): void => {
   if (typeof document === "undefined") return;
   document.cookie = `${REGISTER_DATA_KEY}=; path=/; max-age=0`;
 };
+
+export const clearAllAuthStorage = (): void => {
+  if (typeof document === "undefined") return;
+  clearToken();
+  clearRegisterData();
+  try {
+    if (typeof sessionStorage !== "undefined") sessionStorage.clear();
+    if (typeof localStorage !== "undefined") localStorage.clear();
+  } catch {
+    // ignore
+  }
+};

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -11,7 +10,7 @@ import { loginSchema } from "@/lib/validations/auth";
 import { loginRequest } from "@/lib/api/requests";
 import { setToken } from "@/lib/auth-cookie";
 import { useAuthStore } from "@/stores/use-auth-store";
-import { processError } from "@/lib/api/client";
+import { showErrorToast } from "@/lib/api/client";
 
 const MailIcon = () => (
 	<svg
@@ -158,7 +157,10 @@ export default function LoginPage() {
 				setData({ user: response.data.user });
 				router.push("/dashboard");
 			} else {
-				toast.error(processError(response) ?? "Login failed");
+				showErrorToast(response, {
+					title: "Login failed",
+					message: "Please try again.",
+				});
 			}
 		} finally {
 			setIsLoading(false);

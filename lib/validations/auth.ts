@@ -33,8 +33,26 @@ export const registerSchema = yup.object({
     )
     .min(9, "Password must be at least 9 characters")
     .max(50, "Password must not exceed 50 characters"),
-  phone: yup.string().optional().trim(),
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .trim()
+    .matches(
+      /^\+[1-9]\d{6,14}$/,
+      "Please enter a valid international phone number"
+    ),
   countryCode: yup.string().optional(),
 });
 
 export type RegisterFormValues = yup.InferType<typeof registerSchema>;
+
+/** Validate only the phone field (full international number e.g. +2348012345678). */
+export const validatePhone = (fullPhone: string): string | null => {
+  try {
+    registerSchema.pick(["phone"]).validateSync({ phone: fullPhone });
+    return null;
+  } catch (err) {
+    const yupErr = err as { errors?: string[] };
+    return yupErr.errors?.[0] ?? "Please enter a valid international phone number";
+  }
+};

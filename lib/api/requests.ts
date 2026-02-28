@@ -8,7 +8,7 @@ import {
   useCustomFetchMutation,
   createQueryKey,
 } from "./client";
-import type { ApiResponse, TypeApiResponse, User, LoginResponseData, RegisterPayload, RegisterResponseData } from "./types";
+import type { ApiResponse, TypeApiResponse, User, LoginResponseData, RegisterPayload, RegisterResponseData, VerifyOtpPayload, VerifyOtpResponseData, SendOtpPayload } from "./types";
 
 /** Example: GET /example - add response type in types.ts when you have a real endpoint */
 export const EXAMPLE_QUERY_KEY = "example";
@@ -54,6 +54,22 @@ export async function getCurrentUser(): Promise<TypeApiResponse<{ user: User }>>
 /** POST /auth/register */
 export async function registerRequest(body: RegisterPayload): Promise<TypeApiResponse<RegisterResponseData>> {
   return customFetch<TypeApiResponse<RegisterResponseData>>("/auth/register", {
+    method: "post",
+    body,
+  });
+}
+
+/** POST /auth/verify-otp */
+export async function verifyOtpRequest(body: VerifyOtpPayload): Promise<TypeApiResponse<VerifyOtpResponseData>> {
+  return customFetch<TypeApiResponse<VerifyOtpResponseData>>("/auth/verify-otp", {
+    method: "post",
+    body,
+  });
+}
+
+/** POST /auth/send-otp */
+export async function sendOtpRequest(body: SendOtpPayload): Promise<TypeApiResponse<unknown>> {
+  return customFetch<TypeApiResponse<unknown>>("/auth/send-otp", {
     method: "post",
     body,
   });

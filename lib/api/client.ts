@@ -18,40 +18,70 @@ import type {
 const getBaseUrl = (): string =>
   process.env.NEXT_PUBLIC_API_URL ?? "";
 
+/** API error shape: success false + error with message, optional code and details */
+interface ApiErrorResponse {
+  success?: boolean;
+  error?: {
+    message?: string;
+    code?: string;
+    details?: string[];
+  };
+}
+
 interface ErrorWithResponse {
   response?: {
-    data?: { errors?: unknown; message?: unknown };
+    data?: ApiErrorResponse & { errors?: unknown; message?: unknown };
     message?: string;
   };
   message?: string;
 }
 
-export function processError(err: unknown): string | null {
-  const processNonStrings = (obj: unknown): string => {
-    if (obj === null || typeof obj !== "object" || Array.isArray(obj)) {
-      return String(obj ?? "");
-    }
-    const record = obj as Record<string, unknown>;
-    return Object.entries(record)
-      .map(([key, value]) => {
-        let val = `${key}: `;
-        if (Array.isArray(value)) {
-          val += value.join(", ");
-        } else {
-          val += String(value ?? "");
-        }
-        return val;
-      })
-      .join("\n");
-  };
+export interface ProcessedError {
+  title: string;
+  message: string;
+}
 
-  let message: string | null = null;
+const processNonStrings = (obj: unknown): string => {
+  if (obj === null || typeof obj !== "object" || Array.isArray(obj)) {
+    return String(obj ?? "");
+  }
+  const record = obj as Record<string, unknown>;
+  return Object.entries(record)
+    .map(([key, value]) => {
+      let val = `${key}: `;
+      if (Array.isArray(value)) {
+        val += value.join(", ");
+      } else {
+        val += String(value ?? "");
+      }
+      return val;
+    })
+    .join("\n");
+};
+
+const cleanMessage = (s: string): string =>
+  s.startsWith("Error: ") ? s.substring(7) : s;
+
+export function processError(err: unknown): ProcessedError {
   const e = err as ErrorWithResponse;
+  const data = e?.response?.data as (ApiErrorResponse & { errors?: unknown; message?: unknown }) | undefined;
 
+  if (data?.error && typeof data.error === "object") {
+    const errorObj = data.error;
+    const title = errorObj.message ?? "Validation failed";
+    const details = errorObj.details;
+    const message =
+      Array.isArray(details) && details.length > 0
+        ? details.join(". ")
+        : title;
+    return { title: cleanMessage(title), message: cleanMessage(message) };
+  }
+
+  let message: string;
   if (typeof err === "string") {
     message = err;
-  } else if (e?.response?.data?.errors !== undefined) {
-    const errors = e.response!.data!.errors;
+  } else if (data?.errors !== undefined) {
+    const errors = data.errors;
     if (
       errors !== null &&
       typeof errors === "object" &&
@@ -61,8 +91,8 @@ export function processError(err: unknown): string | null {
     } else {
       message = String(errors ?? "Validation errors occurred");
     }
-  } else if (e?.response?.data?.message !== undefined) {
-    const dataMessage = e.response!.data!.message;
+  } else if (data?.message !== undefined) {
+    const dataMessage = data.message;
     if (
       dataMessage !== null &&
       typeof dataMessage === "object" &&
@@ -80,11 +110,18 @@ export function processError(err: unknown): string | null {
     message = "An unexpected error occurred";
   }
 
-  // Clean up message (remove "Error: " prefix if present)
-  if (message && message.startsWith("Error: ")) {
-    message = message.substring(7);
-  }
-  return message;
+  message = cleanMessage(message);
+  return { title: "Error", message };
+}
+
+export function showErrorToast(
+  err: unknown,
+  fallback: { title: string; message: string }
+): void {
+  const { title, message } = processError(err);
+  toast.error(title || fallback.title, {
+    description: message || fallback.message,
+  });
 }
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -111,25 +148,32 @@ axiosInstance.interceptors.response.use(
       const status = error.response.status;
       switch (status) {
         case 401:
-          toast.error(processError(error) ?? "Unauthorized. Please sign in again.");
+          showErrorToast(error, {
+            title: "Unauthorized",
+            message: "Please sign in again.",
+          });
           break;
         case 403:
-          toast.error(processError(error) ?? "Access Denied");
+          showErrorToast(error, { title: "Access Denied", message: "You do not have permission." });
           break;
         case 404:
-          toast.error(processError(error) ?? "Not Found");
+          showErrorToast(error, { title: "Not Found", message: "The requested resource was not found." });
           break;
         case 500:
         case 502:
         case 503:
         case 504:
-          toast.error(processError(error) ?? "Server Error. Please try again later.");
+          showErrorToast(error, {
+            title: "Server Error",
+            message: "Please try again later.",
+          });
           break;
         default:
+          showErrorToast(error, { title: "Error", message: "Something went wrong." });
           break;
       }
     } else if (error.request) {
-      toast.error("Network Error");
+      toast.error("Network Error", { description: "Please check your connection and try again." });
     }
     return Promise.reject(error);
   }
@@ -184,8 +228,7 @@ export function useCustomFetchQuery<T = unknown>(
         const response = await axiosInstance.get<ApiResponse<T>>(fullUrl, config);
         return response.data;
       } catch (err) {
-        const errorMessage = processError(err) ?? "Error fetching data";
-        toast.error(errorMessage);
+        showErrorToast(err, { title: "Error", message: "Error fetching data." });
         return {
           status: false,
           message: "Error fetching data",

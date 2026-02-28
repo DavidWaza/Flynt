@@ -3,12 +3,21 @@
 import { useState, useCallback, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import { getRegisterData } from "@/lib/auth-cookie";
+import { getRegisterData, clearAllAuthStorage } from "@/lib/auth-cookie";
+import { verifyOtpRequest, sendOtpRequest } from "@/lib/api/requests";
+import { useAuthStore } from "@/stores/use-auth-store";
 
 const OTP_LENGTH = 6;
 const RESEND_COUNTDOWN_SECONDS = 60;
+const OTP_COUNTDOWN_KEY = "flynt_otp_countdown";
+
+interface OtpCountdownSession {
+	endTime: number;
+	durationSeconds: number;
+}
 
 const MailIcon = () => (
 	<svg
@@ -27,89 +36,76 @@ const MailIcon = () => (
 	</svg>
 );
 
-const CheckIcon = () => (
-	<svg
-		className="h-8 w-8"
-		fill="none"
-		viewBox="0 0 24 24"
-		stroke="currentColor"
-		strokeWidth={2.5}
-		aria-hidden
-	>
-		<path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-	</svg>
-);
-
-function SuccessSection({ email }: { email: string }) {
-	const router = useRouter();
-
-	const handleContinue = useCallback(() => {
-		router.push("/onboard");
-	}, [router]);
-
-	const handleKeyDown = useCallback(
-		(e: React.KeyboardEvent) => {
-			if (e.key === "Enter" || e.key === " ") {
-				e.preventDefault();
-				handleContinue();
-			}
-		},
-		[handleContinue]
-	);
-
-	return (
-		<div className="flex flex-col items-center text-center">
-			<div
-				className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-primary/15 text-green-primary"
-				aria-hidden
-			>
-				<CheckIcon />
-			</div>
-			<h1 className="text-2xl font-bold text-text-primary">
-				Verified successfully
-			</h1>
-			<p className="mt-3 text-base text-text-secondary">
-				Your account has been created with the email address{" "}
-				<span className="font-medium text-text-primary">
-					{email || "your email"}
-				</span>
-			</p>
-			<Button
-				type="button"
-				variant="primary"
-				fullWidth
-				size="lg"
-				className="mt-8 cursor-pointer"
-				onClick={handleContinue}
-				onKeyDown={handleKeyDown}
-				aria-label="Continue to onboarding"
-				tabIndex={0}
-			>
-				Continue
-			</Button>
-		</div>
-	);
-}
-
 function VerifyForm({
 	email,
-	onVerified,
+	onVerifySuccess,
 }: {
 	email: string;
-	onVerified: () => void;
+	onVerifySuccess: () => void;
 }) {
 	const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
-	const [countdown, setCountdown] = useState(RESEND_COUNTDOWN_SECONDS);
+	const [countdown, setCountdown] = useState(0);
+	const [isVerifying, setIsVerifying] = useState(false);
+	const [isResending, setIsResending] = useState(false);
 	const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+	const endTimeRef = useRef<number>(0);
 
 	const otpString = otp.join("");
-	const canVerify = otpString.length === OTP_LENGTH;
+	const canVerify = otpString.length === OTP_LENGTH && !isVerifying;
+
+	const persistCountdown = useCallback(
+		(endTime: number, durationSeconds: number) => {
+			if (typeof sessionStorage === "undefined") return;
+			sessionStorage.setItem(
+				OTP_COUNTDOWN_KEY,
+				JSON.stringify({ endTime, durationSeconds })
+			);
+		},
+		[]
+	);
+
+	const clearCountdownSession = useCallback(() => {
+		if (typeof sessionStorage === "undefined") return;
+		sessionStorage.removeItem(OTP_COUNTDOWN_KEY);
+	}, []);
+
+	useEffect(() => {
+		if (typeof sessionStorage === "undefined") return;
+		const raw = sessionStorage.getItem(OTP_COUNTDOWN_KEY);
+		const now = Date.now();
+		if (raw) {
+			try {
+				const parsed = JSON.parse(raw) as OtpCountdownSession;
+				if (parsed?.endTime > now) {
+					const remaining = Math.ceil((parsed.endTime - now) / 1000);
+					setCountdown(remaining);
+					endTimeRef.current = parsed.endTime;
+					return;
+				}
+			} catch {
+				// invalid, start fresh
+			}
+		}
+		const endTime = now + RESEND_COUNTDOWN_SECONDS * 1000;
+		endTimeRef.current = endTime;
+		setCountdown(RESEND_COUNTDOWN_SECONDS);
+		persistCountdown(endTime, RESEND_COUNTDOWN_SECONDS);
+	}, [persistCountdown]);
 
 	useEffect(() => {
 		if (countdown <= 0) return;
-		const timer = setInterval(() => setCountdown((c) => c - 1), 1000);
+		const timer = setInterval(() => {
+			const now = Date.now();
+			const remaining = Math.ceil((endTimeRef.current - now) / 1000);
+			if (remaining <= 0) {
+				setCountdown(0);
+				clearCountdownSession();
+			} else {
+				setCountdown(remaining);
+			}
+		}, 1000);
 		return () => clearInterval(timer);
-	}, [countdown]);
+	}, [countdown, clearCountdownSession]);
 
 	const handleOtpChange = useCallback((index: number, value: string) => {
 		if (value.length > 1) {
@@ -169,15 +165,53 @@ function VerifyForm({
 		inputRefs.current[nextFocus]?.focus();
 	}, []);
 
-	const handleVerify = useCallback(() => {
-		if (!canVerify) return;
-		onVerified();
-	}, [canVerify, onVerified]);
+	const handleVerify = useCallback(async () => {
+		if (!canVerify || !email.trim()) return;
+		setIsVerifying(true);
+		try {
+			const response = await verifyOtpRequest({
+				email: email.trim(),
+				otp: otpString,
+			});
+			if (response.success) {
+				onVerifySuccess();
+			}
+		} finally {
+			setIsVerifying(false);
+		}
+	}, [canVerify, email, otpString, onVerifySuccess]);
 
-	const handleResend = useCallback(() => {
-		if (countdown > 0) return;
-		setCountdown(RESEND_COUNTDOWN_SECONDS);
-	}, [countdown]);
+	const handleResend = useCallback(async () => {
+		if (countdown > 0 || !email.trim() || isResending) return;
+		setIsResending(true);
+		try {
+			await sendOtpRequest({ email: email.trim() });
+			const raw =
+				typeof sessionStorage !== "undefined"
+					? sessionStorage.getItem(OTP_COUNTDOWN_KEY)
+					: null;
+			let lastDuration = RESEND_COUNTDOWN_SECONDS;
+			if (raw) {
+				try {
+					const parsed = JSON.parse(raw) as OtpCountdownSession;
+					if (parsed?.durationSeconds) lastDuration = parsed.durationSeconds;
+				} catch {
+					// ignore
+				}
+			}
+			const newDuration = 2 * lastDuration;
+			const now = Date.now();
+			const endTime = now + newDuration * 1000;
+			endTimeRef.current = endTime;
+			setCountdown(newDuration);
+			persistCountdown(endTime, newDuration);
+			toast.success("Verification code sent", {
+				description: "Check your email.",
+			});
+		} finally {
+			setIsResending(false);
+		}
+	}, [countdown, email, isResending, persistCountdown]);
 
 	const displayEmail = email || "your email";
 
@@ -213,7 +247,8 @@ function VerifyForm({
 						onChange={(e) => handleOtpChange(index, e.target.value)}
 						onKeyDown={(e) => handleKeyDown(index, e)}
 						onPaste={handlePaste}
-						className="h-12 w-12 rounded-lg border border-border-primary bg-bg-card text-center text-2xl font-semibold text-text-primary focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:border-green-primary"
+						disabled={isVerifying}
+						className="h-12 w-12 rounded-lg border border-border-primary bg-bg-card text-center text-2xl font-semibold text-text-primary focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:border-green-primary disabled:opacity-60"
 						aria-label={`Digit ${index + 1}`}
 					/>
 				))}
@@ -228,8 +263,9 @@ function VerifyForm({
 				onClick={handleVerify}
 				disabled={!canVerify}
 				aria-label="Verify code"
+				aria-busy={isVerifying}
 			>
-				Verify
+				{isVerifying ? "Verifying…" : "Verify"}
 			</Button>
 
 			<div className="mt-6 text-center">
@@ -250,10 +286,11 @@ function VerifyForm({
 								handleResend();
 							}
 						}}
-						className="mt-1 text-sm font-semibold text-green-primary hover:text-green-hover focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded cursor-pointer"
+						disabled={isResending}
+						className="mt-1 text-sm font-semibold text-green-primary hover:text-green-hover focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded cursor-pointer disabled:opacity-60"
 						aria-label="Resend code"
 					>
-						Resend code
+						{isResending ? "Sending…" : "Resend code"}
 					</button>
 				)}
 			</div>
@@ -262,10 +299,17 @@ function VerifyForm({
 }
 
 function VerifyEmailContent() {
+	const router = useRouter();
 	const searchParams = useSearchParams();
 	const registerData = getRegisterData();
 	const email = registerData?.email ?? searchParams.get("email") ?? "";
-	const [isVerified, setIsVerified] = useState(false);
+
+	const handleVerifySuccess = useCallback(() => {
+		clearAllAuthStorage();
+		useAuthStore.getState().setData({ user: null });
+		toast.success("Email verified. Please sign in.");
+		router.push("/login");
+	}, [router]);
 
 	return (
 		<div className="w-full max-w-md mx-auto">
@@ -274,25 +318,19 @@ function VerifyEmailContent() {
 				padding="lg"
 				className="border border-border-primary"
 			>
-				{isVerified ? (
-					<SuccessSection email={email} />
-				) : (
-					<VerifyForm email={email} onVerified={() => setIsVerified(true)} />
-				)}
+				<VerifyForm email={email} onVerifySuccess={handleVerifySuccess} />
 			</Card>
-			{!isVerified && (
-				<div className="flex flex-col items-center justify-center">
-					<p className="mt-4 text-center text-xs text-text-muted">
-						Check your spam folder or try resending the code
-					</p>
-					<Link
-						href="#"
-						className="mt-2 inline-block text-xs font-medium text-text-primary dark:text-green-primary hover:underline focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded"
-					>
-						Can&apos;t find the email?
-					</Link>
-				</div>
-			)}
+			<div className="flex flex-col items-center justify-center">
+				<p className="mt-4 text-center text-xs text-text-muted">
+					Check your spam folder or try resending the code
+				</p>
+				<Link
+					href="#"
+					className="mt-2 inline-block text-xs font-medium text-text-primary dark:text-green-primary hover:underline focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded"
+				>
+					Can&apos;t find the email?
+				</Link>
+			</div>
 		</div>
 	);
 }

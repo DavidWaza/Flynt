@@ -51,6 +51,21 @@ export interface RegisterResponseData {
   createdAt: string
 }
 
+export interface VerifyOtpPayload {
+  email: string
+  otp: string
+}
+
+export interface VerifyOtpResponseData {
+  verified: boolean
+  email: string
+  userId: string
+}
+
+export interface SendOtpPayload {
+  email: string
+}
+
 export interface CustomFetchConfig {
   method?: string
   headers?: Record<string, string>

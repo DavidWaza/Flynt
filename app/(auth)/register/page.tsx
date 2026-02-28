@@ -7,9 +7,10 @@ import { toast } from "sonner";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { registerSchema } from "@/lib/validations/auth";
+import { registerSchema, validatePhone } from "@/lib/validations/auth";
 import { registerRequest } from "@/lib/api/requests";
 import { setRegisterData } from "@/lib/auth-cookie";
+import Image from "next/image";
 
 const DIAL_CODE_TO_ISO: Record<string, string> = {
 	"+234": "NG",
@@ -194,16 +195,39 @@ export default function RegisterPage() {
 		setShowPassword((prev) => !prev);
 	};
 
+	const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const raw = e.target.value.replace(/\D/g, "").slice(0, 15);
+		setPhone(raw);
+		const fullPhone = raw ? `${countryCode}${raw}` : "";
+		const message = fullPhone ? validatePhone(fullPhone) : null;
+		setErrors((prev) =>
+			message !== null
+				? { ...prev, phone: message }
+				: { ...prev, phone: undefined }
+		);
+	};
+
+	const handleCountryCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const next = e.target.value;
+		setCountryCode(next);
+		const fullPhone = phone ? `${next}${phone}` : "";
+		const message = fullPhone ? validatePhone(fullPhone) : null;
+		setErrors((prev) =>
+			message !== null
+				? { ...prev, phone: message }
+				: { ...prev, phone: undefined }
+		);
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setErrors({});
+		const nationalDigits = phone.trim().replace(/\D/g, "");
 		const payload = {
 			name: fullName.trim(),
 			email: email.trim(),
 			password,
-			phone: phone.trim()
-				? `${countryCode}${phone.trim().replace(/^\s+|\s+$/g, "")}`
-				: undefined,
+			phone: phone.trim() ? `${countryCode}${nationalDigits}` : "",
 			countryCode: DIAL_CODE_TO_ISO[countryCode],
 		};
 		try {
@@ -236,8 +260,6 @@ export default function RegisterPage() {
 			} else {
 				toast.error(response.message ?? "Registration failed");
 			}
-		} catch {
-			toast.error("Registration failed. Please try again.");
 		} finally {
 			setIsLoading(false);
 		}
@@ -320,12 +342,16 @@ export default function RegisterPage() {
 						<label className="block text-sm font-medium text-text-primary mb-2">
 							Phone Number*
 						</label>
-						<div className="flex rounded-xl border border-border-primary bg-bg-card overflow-hidden focus-within:ring-2 focus-within:ring-green-primary/20 focus-within:border-green-primary">
+						<div
+							className={`flex rounded-xl border bg-bg-card overflow-hidden focus-within:ring-2 focus-within:ring-green-primary/20 focus-within:border-green-primary ${
+								errors.phone ? "border-red-500" : "border-border-primary"
+							}`}
+						>
 							<div className="relative flex items-center border-r border-border-primary bg-bg-elevated">
 								<select
 									className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed dark:text-black"
 									value={countryCode}
-									onChange={(e) => setCountryCode(e.target.value)}
+									onChange={handleCountryCodeChange}
 									aria-label="Select country code"
 								>
 									<option value="+234">NG (+234)</option>
@@ -337,37 +363,47 @@ export default function RegisterPage() {
 								<div className="flex items-center gap-1.5 px-3 py-2.5 pointer-events-none">
 									<span className="flex items-center justify-center shrink-0">
 										{countryCode === "+234" && (
-											<img
+											<Image
 												src="https://flagcdn.com/w40/ng.png"
 												alt="Nigeria"
+												width={20}
+												height={20}
 												className="w-5 h-5 rounded-full object-cover"
 											/>
 										)}
 										{countryCode === "+1" && (
-											<img
+											<Image
 												src="https://flagcdn.com/w40/us.png"
 												alt="USA"
+												width={20}
+												height={20}
 												className="w-5 h-5 rounded-full object-cover"
 											/>
 										)}
 										{countryCode === "+44" && (
-											<img
+											<Image
 												src="https://flagcdn.com/w40/gb.png"
 												alt="UK"
+												width={20}
+												height={20}
 												className="w-5 h-5 rounded-full object-cover"
 											/>
 										)}
 										{countryCode === "+233" && (
-											<img
+											<Image
 												src="https://flagcdn.com/w40/gh.png"
 												alt="Ghana"
+												width={20}
+												height={20}
 												className="w-5 h-5 rounded-full object-cover"
 											/>
 										)}
 										{countryCode === "+254" && (
-											<img
+											<Image
 												src="https://flagcdn.com/w40/ke.png"
 												alt="Kenya"
+												width={20}
+												height={20}
 												className="w-5 h-5 rounded-full object-cover"
 											/>
 										)}
@@ -382,15 +418,27 @@ export default function RegisterPage() {
 							</div>
 							<input
 								type="tel"
-								placeholder="(555) 000-0000"
+								inputMode="numeric"
+								placeholder="8012345678"
 								value={phone}
-								onChange={(e) => setPhone(e.target.value)}
+								onChange={handlePhoneChange}
 								className="flex-1 min-w-0 bg-bg-card px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none border-0"
 								required
 								autoComplete="tel"
 								aria-required="true"
+								aria-invalid={Boolean(errors.phone)}
+								aria-describedby={errors.phone ? "phone-error" : undefined}
 							/>
 						</div>
+						{errors.phone ? (
+							<p
+								id="phone-error"
+								className="mt-1.5 text-sm text-red-500"
+								role="alert"
+							>
+								{errors.phone}
+							</p>
+						) : null}
 					</div>
 					<div>
 						<Input
