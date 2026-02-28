@@ -8,7 +8,21 @@ import {
   useCustomFetchMutation,
   createQueryKey,
 } from "./client";
-import type { ApiResponse, TypeApiResponse, User, LoginResponseData, RegisterPayload, RegisterResponseData, VerifyOtpPayload, VerifyOtpResponseData, SendOtpPayload } from "./types";
+import type {
+  ApiResponse,
+  TypeApiResponse,
+  User,
+  LoginResponseData,
+  RegisterPayload,
+  RegisterResponseData,
+  VerifyOtpPayload,
+  VerifyOtpResponseData,
+  SendOtpPayload,
+  ForgotPasswordPayload,
+  ForgotPasswordResponseData,
+  ResetPasswordPayload,
+  ResetPasswordResponseData,
+} from "./types";
 
 /** Example: GET /example - add response type in types.ts when you have a real endpoint */
 export const EXAMPLE_QUERY_KEY = "example";
@@ -70,6 +84,26 @@ export async function verifyOtpRequest(body: VerifyOtpPayload): Promise<TypeApiR
 /** POST /auth/send-otp */
 export async function sendOtpRequest(body: SendOtpPayload): Promise<TypeApiResponse<unknown>> {
   return customFetch<TypeApiResponse<unknown>>("/auth/send-otp", {
+    method: "post",
+    body,
+  });
+}
+
+/** POST /auth/forgot-password */
+export async function forgotPasswordRequest(
+  body: ForgotPasswordPayload
+): Promise<TypeApiResponse<ForgotPasswordResponseData>> {
+  return customFetch<TypeApiResponse<ForgotPasswordResponseData>>("/auth/forgot-password", {
+    method: "post",
+    body,
+  });
+}
+
+/** POST /auth/reset-password */
+export async function resetPasswordRequest(
+  body: ResetPasswordPayload
+): Promise<TypeApiResponse<ResetPasswordResponseData>> {
+  return customFetch<TypeApiResponse<ResetPasswordResponseData>>("/auth/reset-password", {
     method: "post",
     body,
   });

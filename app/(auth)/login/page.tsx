@@ -248,6 +248,15 @@ export default function LoginPage() {
 						autoComplete="current-password"
 						aria-required="true"
 					/>
+					<div className="flex justify-end">
+						<Link
+							href="/forgot-password"
+							className="text-xs font-medium text-green-primary hover:text-green-hover underline focus:outline-none focus:ring-2 focus:ring-green-primary/20 focus:ring-offset-2 rounded"
+							aria-label="Forgot password?"
+						>
+							Forgot password?
+						</Link>
+					</div>
 
 					<Button
 						type="submit"

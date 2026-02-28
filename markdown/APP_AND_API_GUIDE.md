@@ -23,11 +23,11 @@ Access control can be enforced in **middleware** (if present): it reads the auth
 
 ### 2.1 Layers
 
-| Layer | Role |
-|-------|------|
-| **`lib/api/types.ts`** | Shared types: `TypeApiResponse<T>`, `ApiResponse<T>`, `User`, payload/response types per endpoint. |
-| **`lib/api/client.ts`** | Single Axios instance, interceptors (auth + errors), and helpers: `customFetch`, `useCustomFetchQuery`, `useCustomFetchMutation`, `createQueryKey`, `processError`, `showErrorToast`. |
-| **`lib/api/requests.ts`** | Concrete API functions and hooks that call the client with specific URLs and types (e.g. `loginRequest`, `registerRequest`, `getCurrentUser`). |
+| Layer                     | Role                                                                                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`lib/api/types.ts`**    | Shared types: `TypeApiResponse<T>`, `ApiResponse<T>`, `User`, payload/response types per endpoint.                                                                                    |
+| **`lib/api/client.ts`**   | Single Axios instance, interceptors (auth + errors), and helpers: `customFetch`, `useCustomFetchQuery`, `useCustomFetchMutation`, `createQueryKey`, `processError`, `showErrorToast`. |
+| **`lib/api/requests.ts`** | Concrete API functions and hooks that call the client with specific URLs and types (e.g. `loginRequest`, `registerRequest`, `getCurrentUser`).                                        |
 
 New endpoints: add **types** in `lib/api/types.ts`, **request functions/hooks** in `lib/api/requests.ts`; they automatically use the shared client (base URL, auth, error handling).
 
@@ -64,12 +64,12 @@ The client supports the backend error format:
 
 ```json
 {
-  "success": false,
-  "error": {
-    "message": "Validation failed",
-    "code": "VALIDATION_ERROR",
-    "details": ["Please provide a valid phone number"]
-  }
+	"success": false,
+	"error": {
+		"message": "Validation failed",
+		"code": "VALIDATION_ERROR",
+		"details": ["Please provide a valid phone number"]
+	}
 }
 ```
 
@@ -92,10 +92,13 @@ So every error toast has a **title** and a **message** (description).
 - **Example:**
 
 ```ts
-const res = await customFetch<TypeApiResponse<LoginResponseData>>("/auth/login", {
-  method: "post",
-  body: { email, password },
-});
+const res = await customFetch<TypeApiResponse<LoginResponseData>>(
+	"/auth/login",
+	{
+		method: "post",
+		body: { email, password },
+	}
+);
 ```
 
 All interceptors (auth header, error toasts) apply.
@@ -128,7 +131,7 @@ All interceptors (auth header, error toasts) apply.
 
 - Imports `customFetch`, `useCustomFetchQuery`, `useCustomFetchMutation`, `createQueryKey` from `./client` and types from `./types`.
 - Defines one function or hook per endpoint, e.g.:
-  - **Auth:** `loginRequest`, `registerRequest`, `getCurrentUser`
+  - **Auth:** `loginRequest`, `registerRequest`, `getCurrentUser`, `verifyOtpRequest`, `sendOtpRequest`, `forgotPasswordRequest`, `resetPasswordRequest` (when present)
   - **Example:** `getExample`, `useExampleQuery`, `useCreateExampleMutation`
 
 To add a new endpoint:
@@ -162,7 +165,11 @@ The **API client** uses `getToken()` in the request interceptor to send `Authori
 - **Helpers:** `setRegisterData(data)`, `getRegisterData()`, `clearRegisterData()`.
 - Used to pass registration response (e.g. email, name) to the verify-email page; short-lived (e.g. 15 minutes).
 
-### 5.3 Auth store (Zustand)
+### 5.3 Clear all auth storage
+
+- **clearAllAuthStorage()** (in `lib/auth-cookie.ts`): Clears the token cookie, register-data cookie, `sessionStorage`, and `localStorage`. Use after verify-email success so the user is fully signed out before redirecting to login.
+
+### 5.4 Auth store (Zustand)
 
 **File: `stores/use-auth-store.ts`**
 
@@ -171,7 +178,7 @@ The **API client** uses `getToken()` in the request interceptor to send `Authori
   - `setData(partial)` — set store fields (e.g. `setData({ user })`).
   - `fetchUser()` — GET `/auth/me` via `getCurrentUser()`; on success sets `user` from response; on failure clears user and token.
 
-After **login**, the app sets the token with `setToken`, sets the user (e.g. from login response or by calling `fetchUser()`). The **dashboard layout** (or similar) can call `fetchUser()` when a token exists so the UI has the current user. On **logout**, the app calls `clearToken()` and `setData({ user: null })`.
+After **login**, the app sets the token with `setToken`, sets the user (e.g. from login response or by calling `fetchUser()`). The **dashboard layout** (or similar) can call `fetchUser()` when a token exists so the UI has the current user. On **logout**, the app calls `clearToken()` and `setData({ user: null })`. After **verify-email success**, the app calls `clearAllAuthStorage()` and `setData({ user: null })` before redirecting to login.
 
 ---
 
@@ -192,3 +199,57 @@ After **login**, the app sets the token with `setToken`, sets the user (e.g. fro
 4. **Any API call:** Uses the shared Axios instance → request interceptor adds `Bearer` token if present → backend responds → on error, response interceptor turns the body into a title + message and shows a Sonner toast, then rejects so callers can handle it too if needed.
 
 This keeps auth, base URL, and error handling in one place and lets new features add only types and request functions/hooks in `types.ts` and `requests.ts`.
+
+---
+
+## 8. Themes and color system
+
+- **Source of truth:** [app/globals.css](app/globals.css) defines CSS custom properties for **light** and **dark**.
+- **Scopes:** `:root` and `.light` share the light palette; `.dark` overrides for dark mode. The root element gets class `light` or `dark` from [contexts/ThemeContext.tsx](contexts/ThemeContext.tsx).
+- **Variables (concise list):**
+  - **Backgrounds:** `--bg-primary`, `--bg-secondary`, `--bg-card`, `--bg-elevated`
+  - **Brand green:** `--green-primary`, `--green-hover`, `--green-glow`, `--green-secondary`, `--green-light`, `--green-dark`
+  - **Text:** `--text-primary`, `--text-secondary`, `--text-muted`, `--text-inverse`
+  - **Semantic:** `--success`, `--warning`, `--error`, `--info`
+  - **Borders / hover:** `--border-color`, `--border-hover`, `--border-subtle`, `--bg-hover`
+- **Tailwind usage:** In globals.css, `@theme inline` maps these to the Tailwind v4 theme (e.g. `--color-bg-primary`, `--color-green-primary`). Utility classes used in the app include: `bg-bg-primary`, `bg-bg-secondary`, `bg-bg-card`, `bg-bg-elevated`, `text-text-primary`, `text-text-secondary`, `text-text-muted`, `border-border-primary`, `border-border-subtle`, `bg-green-primary`, `text-green-primary`, `bg-green-hover`, `bg-hover`, `glow-green`.
+- **Reference:** [docs/COLOR_PALETTE.css](docs/COLOR_PALETTE.css) holds additional brand/logo colors (e.g. deep-teal, bright-cyan), gradients, and usage examples (buttons, cards, badges).
+
+---
+
+## 9. Dark and light mode
+
+- **Mechanism:** Class-based. `document.documentElement` has class `light` or `dark`; CSS variables in globals.css are scoped under `.light` and `.dark`, so switching the class flips the palette.
+- **Tailwind:** [tailwind.config.ts](tailwind.config.ts) sets `darkMode: "class"`, so `dark:` variants apply when the root has class `dark`. Prefer theme-aware utilities (e.g. `bg-bg-primary`) so colors follow the variables; use `dark:` only when you need a one-off override.
+- **ThemeProvider:** [contexts/ThemeContext.tsx](contexts/ThemeContext.tsx) provides `theme` and `toggleTheme`. On mount it reads `localStorage.getItem("theme")` or falls back to `prefers-color-scheme: dark`; it applies the class to `document.documentElement` and persists the choice to `localStorage`.
+- **ThemeToggle:** [components/ThemeToggle.tsx](components/ThemeToggle.tsx) is a button that toggles between light and dark (moon/sun icon), updates the root class and localStorage. It can be used standalone or with `useTheme()` from ThemeContext where the provider is available.
+- **Sonner:** [components/ThemeAwareToaster.tsx](components/ThemeAwareToaster.tsx) passes `theme` from `useTheme()` to the Toaster so toasts match the current light/dark theme.
+
+---
+
+## 10. Animation system
+
+- **Framer Motion:** Used for UI motion across the app. Example: [components/ui/Button.tsx](components/ui/Button.tsx) uses `motion.button` with `whileHover`, `whileTap`, and a spring transition. Buttons, cards, modals, and landing components (e.g. Hero, CoreCapabilities, TrustStats) use `motion` from `framer-motion` for enter/exit and micro-interactions.
+- **Tailwind animations:** [tailwind.config.ts](tailwind.config.ts) extends `animation` (e.g. `spin-slow`, `pulse-slow`) and `keyframes` (e.g. accordion-down/up). The **tailwindcss-animate** plugin is used for common animated utilities.
+- **Global CSS:** In [app/globals.css](app/globals.css), a short transition is applied globally for `background-color`, `border-color`, `color`, `fill`, and `stroke` (150ms, cubic-bezier ease) so theme switches and hovers feel smooth.
+
+---
+
+## 11. Tailwind
+
+- **Version:** Tailwind v4. The app uses PostCSS with `@tailwindcss/postcss`; in [app/globals.css](app/globals.css), `@import "tailwindcss"` and `@theme inline` expose the CSS variables to the Tailwind theme.
+- **Config:** [tailwind.config.ts](tailwind.config.ts): `darkMode: "class"`; `content` paths for `pages`, `components`, `app`, `src`; `theme.extend` for colors (brand, semantic), fontFamily, fontSize, borderRadius, boxShadow, animation/keyframes.
+- **Plugins:** `tailwindcss-animate`.
+- **Convention:** Prefer theme-aware utilities (`bg-bg-primary`, `text-text-primary`, `border-border-primary`, `bg-green-primary`) so components work in both themes without extra `dark:` classes where the variables already switch.
+
+---
+
+## 12. Other useful info
+
+- **Providers:** [components/Providers.tsx](components/Providers.tsx) wraps the app with `QueryClientProvider`, `ThemeProvider`, `DebtProvider`, and `ThemeAwareToaster`. Order matters: React Query and theme are outer so they are available everywhere.
+- **Environment:** `NEXT_PUBLIC_API_URL` is used for the API base. Any `NEXT_PUBLIC_*` variable is available on the client; set them in `.env` or `.env.local`.
+- **Key files (short reference):**
+  - **API:** `lib/api/types.ts`, `lib/api/client.ts`, `lib/api/requests.ts`
+  - **Auth:** `lib/auth-cookie.ts`, `stores/use-auth-store.ts`
+  - **Theme:** `contexts/ThemeContext.tsx`, `app/globals.css`, `components/ThemeToggle.tsx`, `components/ThemeAwareToaster.tsx`
+  - **Validation:** `lib/validations/auth.ts`

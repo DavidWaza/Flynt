@@ -66,6 +66,26 @@ export interface SendOtpPayload {
   email: string
 }
 
+export interface ForgotPasswordPayload {
+  email: string
+}
+
+export interface ForgotPasswordResponseData {
+  sent: boolean
+  email: string
+}
+
+export interface ResetPasswordPayload {
+  email: string
+  otp: string
+  newPassword: string
+}
+
+export interface ResetPasswordResponseData {
+  success: boolean
+  message: string
+}
+
 export interface CustomFetchConfig {
   method?: string
   headers?: Record<string, string>
