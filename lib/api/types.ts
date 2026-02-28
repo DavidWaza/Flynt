@@ -2,10 +2,37 @@
  * API types. Add endpoint-specific request/response types here as you add endpoints.
  */
 
+/** Global API response shape (e.g. auth endpoints). */
+export interface TypeApiResponse<T = unknown> {
+  success: boolean
+  message: string
+  data: T
+}
+
 export interface ApiResponse<T = unknown> {
   status: boolean
   message?: string
   data?: T
+}
+
+export interface User {
+  id: string
+  email: string
+  name: string
+  phone: string | null
+  authProvider: string
+  authProviderId: string | null
+  role: string
+  onboardingCompleted: boolean
+  emailVerified: boolean
+  twoFactorEnabled?: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export interface LoginResponseData {
+  user: User
+  token: string
 }
 
 export interface CustomFetchConfig {

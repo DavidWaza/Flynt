@@ -7,6 +7,7 @@ import axios, {
 } from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { getToken } from "@/lib/auth-cookie";
 import type {
   ApiResponse,
   CustomFetchConfig,
@@ -17,8 +18,74 @@ import type {
 const getBaseUrl = (): string =>
   process.env.NEXT_PUBLIC_API_URL ?? "";
 
-/** Plug in cookie/store later when auth is added. */
-const getToken = (): string | null => null;
+interface ErrorWithResponse {
+  response?: {
+    data?: { errors?: unknown; message?: unknown };
+    message?: string;
+  };
+  message?: string;
+}
+
+export function processError(err: unknown): string | null {
+  const processNonStrings = (obj: unknown): string => {
+    if (obj === null || typeof obj !== "object" || Array.isArray(obj)) {
+      return String(obj ?? "");
+    }
+    const record = obj as Record<string, unknown>;
+    return Object.entries(record)
+      .map(([key, value]) => {
+        let val = `${key}: `;
+        if (Array.isArray(value)) {
+          val += value.join(", ");
+        } else {
+          val += String(value ?? "");
+        }
+        return val;
+      })
+      .join("\n");
+  };
+
+  let message: string | null = null;
+  const e = err as ErrorWithResponse;
+
+  if (typeof err === "string") {
+    message = err;
+  } else if (e?.response?.data?.errors !== undefined) {
+    const errors = e.response!.data!.errors;
+    if (
+      errors !== null &&
+      typeof errors === "object" &&
+      !Array.isArray(errors)
+    ) {
+      message = processNonStrings(errors);
+    } else {
+      message = String(errors ?? "Validation errors occurred");
+    }
+  } else if (e?.response?.data?.message !== undefined) {
+    const dataMessage = e.response!.data!.message;
+    if (
+      dataMessage !== null &&
+      typeof dataMessage === "object" &&
+      !Array.isArray(dataMessage)
+    ) {
+      message = processNonStrings(dataMessage);
+    } else {
+      message = String(dataMessage ?? "An unexpected error occurred");
+    }
+  } else if (e?.response?.message) {
+    message = e.response.message;
+  } else if (err instanceof Error && err.message) {
+    message = err.message;
+  } else {
+    message = "An unexpected error occurred";
+  }
+
+  // Clean up message (remove "Error: " prefix if present)
+  if (message && message.startsWith("Error: ")) {
+    message = message.substring(7);
+  }
+  return message;
+}
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: getBaseUrl(),
@@ -30,7 +97,7 @@ axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getToken();
     if (token) {
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -44,18 +111,19 @@ axiosInstance.interceptors.response.use(
       const status = error.response.status;
       switch (status) {
         case 401:
-          toast.error("Unauthorized. Please sign in again.");
+          toast.error(processError(error) ?? "Unauthorized. Please sign in again.");
           break;
         case 403:
-          toast.error("Access Denied");
+          toast.error(processError(error) ?? "Access Denied");
           break;
         case 404:
+          toast.error(processError(error) ?? "Not Found");
           break;
         case 500:
         case 502:
         case 503:
         case 504:
-          toast.error("Server Error. Please try again later.");
+          toast.error(processError(error) ?? "Server Error. Please try again later.");
           break;
         default:
           break;
@@ -116,11 +184,8 @@ export function useCustomFetchQuery<T = unknown>(
         const response = await axiosInstance.get<ApiResponse<T>>(fullUrl, config);
         return response.data;
       } catch (err) {
-        const header =
-          (Array.isArray(queryKey) && queryKey.find((k) => typeof k === "string" && !String(k).includes("-"))) ??
-          queryKey[0] ??
-          "Error fetching data";
-        toast.error(String(header));
+        const errorMessage = processError(err) ?? "Error fetching data";
+        toast.error(errorMessage);
         return {
           status: false,
           message: "Error fetching data",
