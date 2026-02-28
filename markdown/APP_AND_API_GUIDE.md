@@ -253,3 +253,11 @@ This keeps auth, base URL, and error handling in one place and lets new features
   - **Auth:** `lib/auth-cookie.ts`, `stores/use-auth-store.ts`
   - **Theme:** `contexts/ThemeContext.tsx`, `app/globals.css`, `components/ThemeToggle.tsx`, `components/ThemeAwareToaster.tsx`
   - **Validation:** `lib/validations/auth.ts`
+
+---
+
+## 13. Responsive design
+
+- **Dashboard layout:** The dashboard layout is responsive. On viewports below the `lg` breakpoint (1024px), the sidebar is hidden by default and can be opened via a hamburger menu button in the header. The sidebar appears as an overlay; a backdrop closes it when clicked, and navigation (route change) or a close control inside the sidebar also closes it. On `lg` and above, the sidebar is always visible and the main content has a left margin (`ml-64`). Main content area uses responsive padding (`p-4` on small screens, `p-6` from `sm` up). Body scroll is locked while the mobile sidebar is open.
+- **Pages:** Dashboard pages use Tailwind breakpoints (`sm`, `md`, `lg`) and `max-w-7xl mx-auto` for content width. New dashboard UI should be built with mobile-first spacing and breakpoints to avoid horizontal overflow and keep tap targets adequate on small screens.
+- **Key file:** Dashboard layout client component: [app/(protected)/dashboard/DashboardLayoutClient.tsx](<app/(protected)/dashboard/DashboardLayoutClient.tsx>).

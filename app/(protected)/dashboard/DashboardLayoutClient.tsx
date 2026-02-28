@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -28,6 +28,23 @@ export default function DashboardLayoutClient({
 	}
 
 	const displayUser = user ?? initialUser;
+	const [sidebarOpen, setSidebarOpen] = useState(false);
+
+	useEffect(() => {
+		setSidebarOpen(false);
+	}, [pathname]);
+
+	useEffect(() => {
+		if (typeof document === "undefined") return;
+		if (sidebarOpen) {
+			document.body.classList.add("overflow-hidden");
+		} else {
+			document.body.classList.remove("overflow-hidden");
+		}
+		return () => {
+			document.body.classList.remove("overflow-hidden");
+		};
+	}, [sidebarOpen]);
 
 	const handleLogout = () => {
 		clearToken();
@@ -50,15 +67,58 @@ export default function DashboardLayoutClient({
 
 	return (
 		<div className="flex min-h-screen bg-bg-primary">
-			<aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border-primary bg-bg-secondary shadow-sm">
+			{/* Backdrop: visible only when sidebar open on small screens */}
+			<button
+				type="button"
+				aria-label="Close menu"
+				className={`fixed inset-0 z-30 bg-black/50 transition-opacity lg:hidden ${
+					sidebarOpen ? "opacity-100" : "pointer-events-none opacity-0"
+				}`}
+				onClick={() => setSidebarOpen(false)}
+				tabIndex={sidebarOpen ? 0 : -1}
+			/>
+
+			<aside
+				className={`fixed left-0 top-0 z-40 h-screen w-64 border-r border-border-primary bg-bg-secondary shadow-sm transition-transform duration-200 ease-out ${
+					sidebarOpen ? "translate-x-0" : "-translate-x-full"
+				} lg:translate-x-0`}
+			>
 				<div className="flex h-full flex-col">
-					<div className="flex h-16 items-center px-6 border-b border-border-primary">
+					<div className="flex h-16 items-center justify-between border-b border-border-primary px-4 sm:px-6">
 						<Link
 							href="/"
 							className="flex items-center gap-2 uppercase font-extrabold tracking-wider"
 						>
 							FLYNT
 						</Link>
+						<button
+							type="button"
+							onClick={() => setSidebarOpen(false)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									setSidebarOpen(false);
+								}
+							}}
+							className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-green-primary/20 lg:hidden"
+							aria-label="Close menu"
+							tabIndex={0}
+						>
+							<svg
+								className="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								aria-hidden
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M6 18L18 6M6 6l12 12"
+								/>
+							</svg>
+						</button>
 					</div>
 
 					<nav className="flex-1 space-y-1 px-3 py-4">
@@ -231,20 +291,54 @@ export default function DashboardLayoutClient({
 				</div>
 			</aside>
 
-			<div className="flex-1 ml-64">
-				<header className="sticky top-0 z-30 border-b border-border-primary bg-white/80 dark:bg-bg-secondary/80 backdrop-blur-xl shadow-sm">
-					<div className="flex h-16 items-center justify-between px-6">
-						<div className="flex items-center gap-4">
-							<p className="text-sm text-text-secondary font-bold">
+			<div className="flex-1 min-w-0 lg:ml-64">
+				<header className="sticky top-0 z-20 border-b border-border-primary bg-white/80 dark:bg-bg-secondary/80 backdrop-blur-xl shadow-sm">
+					<div className="flex h-16 items-center justify-between gap-2 px-4 sm:px-6">
+						<div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
+							<button
+								type="button"
+								onClick={() => setSidebarOpen((prev) => !prev)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" || e.key === " ") {
+										e.preventDefault();
+										setSidebarOpen((prev) => !prev);
+									}
+								}}
+								className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-green-primary/20 lg:hidden"
+								aria-label={sidebarOpen ? "Close menu" : "Open menu"}
+								tabIndex={0}
+							>
+								<svg
+									className="h-5 w-5"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									aria-hidden
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M4 6h16M4 12h16M4 18h16"
+									/>
+								</svg>
+							</button>
+							<p className="min-w-0 truncate text-xs font-bold text-text-secondary sm:text-sm">
 								Hello{" "}
 								<span className="uppercase text-[#4AD9A3]">
 									{displayUser?.name ?? ""},
-								</span>{" "}
-								welcome back to <span className="text-[#4AD9A3]">Flynt</span> 👋
+								</span>
+								<span className="hidden sm:inline">
+									{" "}
+									welcome back to <span className="text-[#4AD9A3]">
+										Flynt
+									</span>{" "}
+									👋
+								</span>
 							</p>
 						</div>
 
-						<div className="flex items-center gap-3">
+						<div className="flex shrink-0 items-center gap-2 sm:gap-3">
 							<ThemeToggle />
 							<button
 								type="button"
@@ -315,7 +409,7 @@ export default function DashboardLayoutClient({
 					</div>
 				</header>
 
-				<main className="p-6">{children}</main>
+				<main className="p-4 sm:p-6">{children}</main>
 			</div>
 		</div>
 	);
