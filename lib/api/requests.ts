@@ -8,7 +8,7 @@ import {
   useCustomFetchMutation,
   createQueryKey,
 } from "./client";
-import type { ApiResponse, TypeApiResponse, User, LoginResponseData } from "./types";
+import type { ApiResponse, TypeApiResponse, User, LoginResponseData, RegisterPayload, RegisterResponseData } from "./types";
 
 /** Example: GET /example - add response type in types.ts when you have a real endpoint */
 export const EXAMPLE_QUERY_KEY = "example";
@@ -48,6 +48,14 @@ export async function loginRequest(body: {
 export async function getCurrentUser(): Promise<TypeApiResponse<{ user: User }>> {
   return customFetch<TypeApiResponse<{ user: User }>>("/auth/me", {
     method: "get",
+  });
+}
+
+/** POST /auth/register */
+export async function registerRequest(body: RegisterPayload): Promise<TypeApiResponse<RegisterResponseData>> {
+  return customFetch<TypeApiResponse<RegisterResponseData>>("/auth/register", {
+    method: "post",
+    body,
   });
 }
 

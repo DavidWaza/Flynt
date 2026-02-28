@@ -35,6 +35,22 @@ export interface LoginResponseData {
   token: string
 }
 
+export interface RegisterPayload {
+  email: string
+  password: string
+  name: string
+  phone?: string
+  countryCode?: string
+}
+
+export interface RegisterResponseData {
+  id: string
+  email: string
+  name: string
+  role: string
+  createdAt: string
+}
+
 export interface CustomFetchConfig {
   method?: string
   headers?: Record<string, string>
